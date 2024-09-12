@@ -1,5 +1,6 @@
 package dev.akarah.loading;
 
+import dev.akarah.MinecraftServer;
 import dev.akarah.ServerPlugin;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -17,8 +18,13 @@ public class PluginLoader {
 
     public static void reloadAllPlugins() {
         System.out.println("Clearing all loaded plugins...");
+
         LOADED_PLUGINS.clear();
         CLASS_LOADERS.clear();
+
+        MinecraftServer.listeners().playerEventListeners().clear();
+        MinecraftServer.listeners().dynamicRegistryListeners().clear();
+        MinecraftServer.listeners().staticRegistryListeners().clear();
 
         try(var walk = Files.walk(FabricLoader.getInstance().getGameDir().resolve("./plugins/"))) {
             walk.forEach(pluginFile -> {

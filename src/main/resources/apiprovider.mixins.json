@@ -4,7 +4,11 @@
   "package": "dev.akarah.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ReloadCommandMixin"
+    "MinecraftServerMixin",
+    "ReloadCommandMixin",
+    "ServerGamePacketListenerImplMixin",
+    "ServerPlayerGameModeMixin",
+    "ServerPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

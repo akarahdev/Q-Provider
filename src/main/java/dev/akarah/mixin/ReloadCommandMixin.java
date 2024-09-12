@@ -21,6 +21,7 @@ public abstract class ReloadCommandMixin {
             source.sendSuccess(() -> Component.literal("Reloaded all plugins!"), true);
         } catch (Exception e) {
             source.sendFailure(Component.literal("Reloading failed. Check console for errors."));
+            e.printStackTrace();
         }
     }
 }
