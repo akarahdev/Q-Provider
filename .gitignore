@@ -46,3 +46,4 @@ bin/
 
 ### Dev Side ###
 /ExamplePlugin/**/**/**/**/**
+/run/

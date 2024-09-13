@@ -1,4 +1,4 @@
-package dev.akarah.provider;
+package dev.akarah.provider.entity;
 
 import dev.akarah.datatypes.Location;
 import dev.akarah.datatypes.ResourceKey;
@@ -36,6 +36,11 @@ public class EntityImpl implements Entity {
                 entity.getY(),
                 entity.getZ()
         );
+    }
+
+    @Override
+    public void teleport(Location location) {
+        entity.teleportTo(location.x(), location.y(), location.z());
     }
 
     @Override

@@ -1,5 +1,6 @@
-package dev.akarah.provider;
+package dev.akarah.provider.entity;
 
+import dev.akarah.datatypes.Location;
 import dev.akarah.entities.Player;
 import dev.akarah.item.Item;
 import net.minecraft.network.chat.Component;

@@ -1,7 +1,7 @@
 package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
-import dev.akarah.provider.PlayerImpl;
+import dev.akarah.provider.entity.PlayerImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
