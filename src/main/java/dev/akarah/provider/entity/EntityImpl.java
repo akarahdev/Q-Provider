@@ -33,9 +33,9 @@ public class EntityImpl implements Entity {
     @Override
     public Location location() {
         return Location.of(
-                entity.getX(),
-                entity.getY(),
-                entity.getZ()
+            entity.getX(),
+            entity.getY(),
+            entity.getZ()
         );
     }
 

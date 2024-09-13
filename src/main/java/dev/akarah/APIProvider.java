@@ -5,7 +5,6 @@ import dev.akarah.provider.entity.PlayerImpl;
 import dev.akarah.provider.registry.MasterRegistry;
 import dev.akarah.registry.Registries;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 
 import java.util.logging.Logger;

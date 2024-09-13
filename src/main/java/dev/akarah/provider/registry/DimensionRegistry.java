@@ -15,12 +15,12 @@ public class DimensionRegistry implements Registry<Dimension> {
     @Override
     public Optional<Dimension> lookup(ResourceKey<Dimension> key) {
         var cl = net.minecraft.resources.ResourceKey
-                .create(Registries.DIMENSION, ResourceLocation.parse(key.toString()));
+            .create(Registries.DIMENSION, ResourceLocation.parse(key.toString()));
 
         // guaqranteed to exist, so Optional#get is safe in this context
         var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.DIMENSION).get();
 
-        if(reg.get(cl).isPresent()) {
+        if (reg.get(cl).isPresent()) {
             return Optional.of(new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(cl)));
         }
         return Optional.empty();

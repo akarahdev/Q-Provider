@@ -1,7 +1,6 @@
 package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
-import dev.akarah.datatypes.Location;
 import dev.akarah.datatypes.Vector;
 import dev.akarah.provider.entity.PlayerImpl;
 import net.minecraft.core.Direction;
@@ -43,9 +42,9 @@ public class ServerGamePacketListenerImplMixin {
 
         for (var listener : MinecraftServer.listeners().playerEventListeners()) {
             listener.event().onPlaceBlock(new PlayerImpl(this.player), new Vector(
-                    (double) pos.getX(),
-                    (double) pos.getY(),
-                    (double) pos.getZ()
+                (double) pos.getX(),
+                (double) pos.getY(),
+                (double) pos.getZ()
             ));
         }
 

@@ -25,15 +25,15 @@ public class ServerPlayerGameModeMixin {
     public void destroyAndAck(BlockPos pos, int sequence, String message, CallbackInfo ci) {
         // player.serverLevel().getBlockState(pos) to get the block before breaking
         // and attempt to stop the server from doing it if it's cancelled :3
-        for(var listener : MinecraftServer.listeners().playerEventListeners()) {
+        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
             listener.event().onBreakBlock(new PlayerImpl(this.player), new Vector(
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ()
+                pos.getX(),
+                pos.getY(),
+                pos.getZ()
             ));
         }
         // placeholding logic
-        if(false) {
+        if (false) {
             this.player.connection.send(new ClientboundBlockUpdatePacket(pos, this.player.level().getBlockState(pos)));
             ci.cancel();
         }

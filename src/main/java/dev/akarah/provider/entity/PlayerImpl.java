@@ -1,6 +1,5 @@
 package dev.akarah.provider.entity;
 
-import dev.akarah.datatypes.Location;
 import dev.akarah.entities.Player;
 import dev.akarah.item.Item;
 import net.minecraft.network.chat.Component;
@@ -21,39 +20,39 @@ public class PlayerImpl extends EntityImpl implements Player {
     @Override
     public void sendMessage(String message) {
         player.connection.send(new ClientboundSystemChatPacket(
-                Component.literal(message),
-                false
+            Component.literal(message),
+            false
         ));
     }
 
     @Override
     public void sendActionBar(String message) {
         player.connection.send(new ClientboundSystemChatPacket(
-                Component.literal(message),
-                true
+            Component.literal(message),
+            true
         ));
     }
 
     @Override
     public void sendTitle(String title) {
         player.connection.send(new ClientboundSetTitleTextPacket(
-                Component.literal(title)
+            Component.literal(title)
         ));
     }
 
     @Override
     public void sendSubtitle(String subtitle) {
         player.connection.send(new ClientboundSetSubtitleTextPacket(
-                Component.literal(subtitle)
+            Component.literal(subtitle)
         ));
     }
 
     @Override
     public void sendTitleTimes(int duration, int fadeIn, int fadeOut) {
         player.connection.send(new ClientboundSetTitlesAnimationPacket(
-                fadeIn,
-                duration,
-                fadeOut
+            fadeIn,
+            duration,
+            fadeOut
         ));
     }
 

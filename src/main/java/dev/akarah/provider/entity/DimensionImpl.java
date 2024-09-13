@@ -37,9 +37,9 @@ public class DimensionImpl implements Dimension {
     @Override
     public void breakBlockAt(Location location) {
         level.destroyBlock(new BlockPos(
-                (int) location.x(),
-                (int) location.y(),
-                (int) location.z()
+            (int) location.x(),
+            (int) location.y(),
+            (int) location.z()
         ), true);
     }
 
@@ -53,9 +53,9 @@ public class DimensionImpl implements Dimension {
     public Entity spawnEntity(Location location, dev.akarah.entities.EntityType entityType) {
         var mcType = EntityType.byString(entityType.resourceKey.toString()).get();
         var outEnt = mcType.spawn(level, new BlockPos(
-                (int) location.x(),
-                (int) location.y(),
-                (int) location.z()
+            (int) location.x(),
+            (int) location.y(),
+            (int) location.z()
         ), MobSpawnType.COMMAND);
         return new EntityImpl(outEnt);
     }

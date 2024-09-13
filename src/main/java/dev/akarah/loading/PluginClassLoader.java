@@ -2,13 +2,11 @@ package dev.akarah.loading;
 
 import dev.akarah.ServerPlugin;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.server.MinecraftServer;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -20,33 +18,33 @@ public class PluginClassLoader extends URLClassLoader {
     public UUID temporaryUuid;
 
     public PluginClassLoader(
-            InputStream jarFileStream,
-            UUID temporaryUuid
+        InputStream jarFileStream,
+        UUID temporaryUuid
     ) throws IOException {
         super(new URL[]{
-                FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar")
-                        .toUri().toURL()
+            FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar")
+                .toUri().toURL()
         }, Thread.currentThread().getContextClassLoader());
         this.temporaryUuid = temporaryUuid;
 
         System.out.println("Creating new plugin class loader of " + temporaryUuid);
         Files.write(
-                FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar"),
-                jarFileStream.readAllBytes()
+            FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar"),
+            jarFileStream.readAllBytes()
         );
 
-        try(var jf = new JarFile(new File(
-                FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar")
-                        .toUri()
+        try (var jf = new JarFile(new File(
+            FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar")
+                .toUri()
         ))) {
             jf.entries().asIterator().forEachRemaining(entry -> {
-                if(entry.getName().endsWith(".class")) {
+                if (entry.getName().endsWith(".class")) {
                     try {
                         System.out.println("en: " + entry.getName());
                         this.loadClass(
-                                entry.getName()
-                                        .replace(".class", "")
-                                        .replace("/", ".")
+                            entry.getName()
+                                .replace(".class", "")
+                                .replace("/", ".")
                         );
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
@@ -63,7 +61,7 @@ public class PluginClassLoader extends URLClassLoader {
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         var clazz = super.findClass(name);
         System.out.println("name: " + name);
-        if(Arrays.toString(clazz.getInterfaces()).contains("[interface dev.akarah.ServerPlugin]")) {
+        if (Arrays.toString(clazz.getInterfaces()).contains("[interface dev.akarah.ServerPlugin]")) {
             System.out.println("it's a plugin!");
             try {
                 var plugin = (ServerPlugin) clazz.getConstructor().newInstance();
@@ -89,7 +87,7 @@ public class PluginClassLoader extends URLClassLoader {
         super.close();
 
         Files.delete(
-                FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar")
+            FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar")
         );
     }
 }

@@ -10,12 +10,13 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Optional;
 
 public class ItemRegistry implements Registry<Item> {
-    ItemRegistry() {}
+    ItemRegistry() {
+    }
 
     @Override
     public Optional<Item> lookup(ResourceKey<Item> key) {
         var rl = ResourceLocation.parse(key.toString());
-        if(BuiltInRegistries.ITEM.containsKey(rl)) {
+        if (BuiltInRegistries.ITEM.containsKey(rl)) {
             return Optional.of(Item.of(key, 1));
         }
         return Optional.empty();

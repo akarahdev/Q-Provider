@@ -7,9 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class PluginLoader {
@@ -26,10 +24,10 @@ public class PluginLoader {
         MinecraftServer.listeners().dynamicRegistryListeners().clear();
         MinecraftServer.listeners().staticRegistryListeners().clear();
 
-        try(var walk = Files.walk(FabricLoader.getInstance().getGameDir().resolve("./plugins/"))) {
+        try (var walk = Files.walk(FabricLoader.getInstance().getGameDir().resolve("./plugins/"))) {
             walk.forEach(pluginFile -> {
                 try {
-                    if(pluginFile.getFileName().toString().endsWith(".jar")) {
+                    if (pluginFile.getFileName().toString().endsWith(".jar")) {
                         System.out.println("Loading plugin file " + pluginFile.getFileName());
                         new PluginClassLoader(
                             Files.newInputStream(pluginFile),
@@ -45,6 +43,7 @@ public class PluginLoader {
             e.printStackTrace();
         }
     }
+
     public static void reloadPlugin(String id) {
         var cl = CLASS_LOADERS.get(id);
         var jarFile = cl.getURLs()[0];
