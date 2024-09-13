@@ -4,6 +4,7 @@ import dev.akarah.datatypes.Location;
 import dev.akarah.datatypes.ResourceKey;
 import dev.akarah.entities.Entity;
 import dev.akarah.entities.EntityComponent;
+import dev.akarah.entities.EntityType;
 
 import java.util.UUID;
 
@@ -15,8 +16,8 @@ public class EntityImpl implements Entity {
     }
 
     @Override
-    public ResourceKey<Entity> mobId() {
-        return ResourceKey.of("minecraft:zombie");
+    public EntityType mobId() {
+        return EntityType.of(ResourceKey.of(entity.getType().getDescriptionId()));
     }
 
     @Override

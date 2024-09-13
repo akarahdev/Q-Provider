@@ -1,6 +1,7 @@
 package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
+import dev.akarah.datatypes.Vector;
 import dev.akarah.provider.entity.PlayerImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -25,7 +26,11 @@ public class ServerPlayerGameModeMixin {
         // player.serverLevel().getBlockState(pos) to get the block before breaking
         // and attempt to stop the server from doing it if it's cancelled :3
         for(var listener : MinecraftServer.listeners().playerEventListeners()) {
-            listener.event().onBreakBlock(new PlayerImpl(this.player));
+            listener.event().onBreakBlock(new PlayerImpl(this.player), new Vector(
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ()
+            ));
         }
         // placeholding logic
         if(false) {

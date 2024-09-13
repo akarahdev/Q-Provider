@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Optional;
 
 public class ItemRegistry implements Registry<Item> {
-    private ItemRegistry() {}
+    ItemRegistry() {}
 
     @Override
     public Optional<Item> lookup(ResourceKey<Item> key) {

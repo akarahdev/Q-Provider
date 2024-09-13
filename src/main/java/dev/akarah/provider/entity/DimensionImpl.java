@@ -50,8 +50,8 @@ public class DimensionImpl implements Dimension {
     }
 
     @Override
-    public Entity spawnEntity(Location location, ResourceKey<Entity> entityType) {
-        var mcType = EntityType.byString(entityType.toString()).get();
+    public Entity spawnEntity(Location location, dev.akarah.entities.EntityType entityType) {
+        var mcType = EntityType.byString(entityType.resourceKey.toString()).get();
         var outEnt = mcType.spawn(level, new BlockPos(
                 (int) location.x(),
                 (int) location.y(),

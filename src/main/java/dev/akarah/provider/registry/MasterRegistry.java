@@ -17,6 +17,6 @@ public class MasterRegistry implements Registry<Registry<?>> {
 
     @Override
     public void put(ResourceKey<Registry<?>> resourceKey, Registry<?> value) throws RegistryFrozenException {
-
+        throw new RegistryFrozenException();
     }
 }
