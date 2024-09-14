@@ -4,6 +4,7 @@ import dev.akarah.loading.PluginLoader;
 import dev.akarah.provider.entity.PlayerImpl;
 import dev.akarah.provider.registry.MasterRegistry;
 import dev.akarah.registry.Registries;
+import dev.akarah.registry.Registry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 

@@ -1,7 +1,7 @@
 package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
-import dev.akarah.datatypes.Vector;
+import dev.akarah.datatypes.Location;
 import dev.akarah.provider.entity.PlayerImpl;
 import net.minecraft.core.Direction;
 import net.minecraft.network.DisconnectionDetails;
@@ -41,11 +41,16 @@ public class ServerGamePacketListenerImplMixin {
         var posState = player.serverLevel().getBlockState(pos);
 
         for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            listener.event().onPlaceBlock(new PlayerImpl(this.player), new Vector(
-                (double) pos.getX(),
-                (double) pos.getY(),
-                (double) pos.getZ()
-            ));
+            try {
+                listener.event().onPlaceBlock(new PlayerImpl(this.player), new Location(
+                    (double) pos.getX(),
+                    (double) pos.getY(),
+                    (double) pos.getZ(),
+                    0f, 0f
+                ));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         // TODO: make event cancellable

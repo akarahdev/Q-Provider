@@ -7,8 +7,7 @@
     "MinecraftServerMixin",
     "ReloadCommandMixin",
     "ServerGamePacketListenerImplMixin",
-    "ServerPlayerGameModeMixin",
-    "ServerPlayerMixin"
+    "ServerPlayerGameModeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

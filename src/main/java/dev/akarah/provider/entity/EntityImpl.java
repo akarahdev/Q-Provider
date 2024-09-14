@@ -1,7 +1,9 @@
 package dev.akarah.provider.entity;
 
+import dev.akarah.APIProvider;
+import dev.akarah.datatypes.Identifier;
 import dev.akarah.datatypes.Location;
-import dev.akarah.datatypes.ResourceKey;
+import dev.akarah.dimension.Dimension;
 import dev.akarah.entities.Entity;
 import dev.akarah.entities.EntityComponent;
 import dev.akarah.entities.EntityType;
@@ -17,7 +19,7 @@ public class EntityImpl implements Entity {
 
     @Override
     public EntityType mobId() {
-        return EntityType.of(ResourceKey.of(entity.getType().getDescriptionId()));
+        return EntityType.of(Identifier.of(entity.getType().getDescriptionId()));
     }
 
     @Override
@@ -37,6 +39,11 @@ public class EntityImpl implements Entity {
             entity.getY(),
             entity.getZ()
         );
+    }
+
+    @Override
+    public Dimension dimension() {
+        return new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension()));
     }
 
     @Override
