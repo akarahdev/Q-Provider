@@ -2,7 +2,7 @@ package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
 import dev.akarah.datatypes.Location;
-import dev.akarah.provider.entity.PlayerImpl;
+import dev.akarah.provider.entity.EntityImpl;
 import net.minecraft.core.Direction;
 import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
@@ -22,41 +22,7 @@ public class ServerGamePacketListenerImplMixin {
     @Inject(method = "onDisconnect", at = @At("HEAD"))
     public void onDisconnect(DisconnectionDetails details, CallbackInfo ci) {
         for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            listener.event().onConnect(new PlayerImpl(this.player));
-        }
-    }
-
-    @Inject(method = "handleUseItemOn",
-        at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;" +
-                "send(Lnet/minecraft/network/protocol/Packet;)V",
-            ordinal = 1),
-        cancellable = true
-    )
-    public void handleUseItemOn(ServerboundUseItemOnPacket packet, CallbackInfo ci) {
-        Direction direction = packet.getHitResult().getDirection();
-
-        var oldState = player.serverLevel().getBlockState(packet.getHitResult().getBlockPos());
-        var pos = packet.getHitResult().getBlockPos().relative(direction);
-        var posState = player.serverLevel().getBlockState(pos);
-
-        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            try {
-                listener.event().onPlaceBlock(new PlayerImpl(this.player), new Location(
-                    (double) pos.getX(),
-                    (double) pos.getY(),
-                    (double) pos.getZ(),
-                    0f, 0f
-                ));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // TODO: make event cancellable
-        if (false) {
-            player.serverLevel().setBlockAndUpdate(pos, oldState);
-            ci.cancel();
+            listener.event().onConnect(new EntityImpl(this.player));
         }
     }
 }

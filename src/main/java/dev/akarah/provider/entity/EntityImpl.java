@@ -7,7 +7,12 @@ import dev.akarah.dimension.Dimension;
 import dev.akarah.entities.Entity;
 import dev.akarah.entities.EntityComponent;
 import dev.akarah.entities.EntityType;
+import dev.akarah.provider.entity.components.IdentityView;
+import dev.akarah.provider.entity.components.LocationView;
+import dev.akarah.provider.entity.components.PlayerView;
+import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class EntityImpl implements Entity {
@@ -18,42 +23,26 @@ public class EntityImpl implements Entity {
     }
 
     @Override
-    public EntityType mobId() {
-        return EntityType.of(Identifier.of(entity.getType().getDescriptionId()));
+    public EntityType entityType() {
+        return new EntityTypeImpl(Identifier.of(entity.getType().getDescriptionId()));
     }
 
     @Override
-    public int temporaryId() {
-        return entity.getId();
-    }
-
-    @Override
-    public UUID uuid() {
-        return entity.getUUID();
-    }
-
-    @Override
-    public Location location() {
-        return Location.of(
-            entity.getX(),
-            entity.getY(),
-            entity.getZ()
-        );
-    }
-
-    @Override
-    public Dimension dimension() {
-        return new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension()));
-    }
-
-    @Override
-    public void teleport(Location location) {
-        entity.teleportTo(location.x(), location.y(), location.z());
-    }
-
-    @Override
-    public <T> T component(EntityComponent<T> component) {
-        throw new RuntimeException("TODO");
+    public <T> Optional<T> component(EntityComponent<T> component) {
+        switch (component.internalName().toString()) {
+             case "api:location" -> {
+                return (Optional<T>) Optional.of(new LocationView(this.entity));
+             }
+             case "api:identity" -> {
+                 return (Optional<T>) Optional.of(new IdentityView(this.entity));
+             }
+             case "api:player" -> {
+                 if(this.entity instanceof ServerPlayer player) {
+                     return (Optional<T>) Optional.of(new PlayerView(player));
+                 }
+             }
+        }
+        return Optional.empty();
     }
 
     @Override

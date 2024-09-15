@@ -12,6 +12,7 @@ public class MasterRegistry implements Registry<Registry<?>> {
         return switch (key.toString()) {
             case "minecraft:item" -> Optional.of(new ItemRegistry());
             case "minecraft:dimension" -> Optional.of(new DimensionRegistry());
+            case "minecraft:block" -> Optional.of(new BlockTypeRegistry());
             case "api:master" -> Optional.of(new MasterRegistry());
             default -> Optional.empty();
         };

@@ -1,12 +1,12 @@
 package dev.akarah;
 
 import dev.akarah.loading.PluginLoader;
-import dev.akarah.provider.entity.PlayerImpl;
+import dev.akarah.provider.entity.EntityImpl;
 import dev.akarah.provider.registry.MasterRegistry;
 import dev.akarah.registry.Registries;
-import dev.akarah.registry.Registry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.logging.Logger;
 
@@ -22,9 +22,11 @@ public class APIProvider implements ModInitializer {
         Registries.REGISTRIES = new MasterRegistry();
 
         ServerPlayConnectionEvents.JOIN.register((packetListener, packetSender, minecraftServer) -> {
-            var player = new PlayerImpl(packetListener.player);
+            var player = new EntityImpl(packetListener.player);
 
-            System.out.println(MinecraftServer.listeners().playerEventListeners());
+            for(var listener : MinecraftServer.listeners().playerEventListeners()) {
+                listener.event().onConnect(player);
+            }
         });
     }
 }
