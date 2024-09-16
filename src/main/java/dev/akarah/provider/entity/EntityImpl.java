@@ -1,9 +1,6 @@
 package dev.akarah.provider.entity;
 
-import dev.akarah.APIProvider;
-import dev.akarah.datatypes.Identifier;
-import dev.akarah.datatypes.Location;
-import dev.akarah.dimension.Dimension;
+import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.entities.Entity;
 import dev.akarah.entities.EntityComponent;
 import dev.akarah.entities.EntityType;
@@ -13,7 +10,6 @@ import dev.akarah.provider.entity.components.PlayerView;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public class EntityImpl implements Entity {
     public net.minecraft.world.entity.Entity entity;

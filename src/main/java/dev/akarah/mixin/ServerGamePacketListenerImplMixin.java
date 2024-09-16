@@ -1,11 +1,8 @@
 package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
-import dev.akarah.datatypes.Location;
 import dev.akarah.provider.entity.EntityImpl;
-import net.minecraft.core.Direction;
 import net.minecraft.network.DisconnectionDetails;
-import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.spongepowered.asm.mixin.Mixin;

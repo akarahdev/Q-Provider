@@ -1,6 +1,6 @@
 package dev.akarah.provider.registry;
 
-import dev.akarah.datatypes.Identifier;
+import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.registry.Registry;
 import dev.akarah.registry.RegistryFrozenException;
 

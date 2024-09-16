@@ -1,11 +1,9 @@
 package dev.akarah.provider.registry;
 
 import dev.akarah.APIProvider;
-import dev.akarah.datatypes.Identifier;
-import dev.akarah.dimension.Block;
+import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.dimension.BlockType;
 import dev.akarah.provider.entity.BlockTypeImpl;
-import dev.akarah.provider.entity.DimensionImpl;
 import dev.akarah.registry.Registry;
 import dev.akarah.registry.RegistryFrozenException;
 import net.minecraft.core.registries.Registries;

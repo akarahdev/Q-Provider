@@ -1,7 +1,7 @@
 package dev.akarah.provider.entity.components;
 
 import dev.akarah.APIProvider;
-import dev.akarah.datatypes.Location;
+import dev.akarah.datatypes.server.Location;
 import dev.akarah.dimension.Dimension;
 import dev.akarah.entities.types.LocationComponent;
 import dev.akarah.provider.entity.DimensionImpl;

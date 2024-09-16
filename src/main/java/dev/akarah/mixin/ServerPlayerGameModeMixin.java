@@ -1,7 +1,7 @@
 package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
-import dev.akarah.datatypes.Location;
+import dev.akarah.datatypes.server.Location;
 import dev.akarah.provider.entity.EntityImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;

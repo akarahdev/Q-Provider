@@ -1,7 +1,7 @@
 package dev.akarah.provider.registry;
 
 import dev.akarah.APIProvider;
-import dev.akarah.datatypes.Identifier;
+import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.dimension.Dimension;
 import dev.akarah.provider.entity.DimensionImpl;
 import dev.akarah.registry.Registry;
