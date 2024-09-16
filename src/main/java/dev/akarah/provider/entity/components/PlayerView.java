@@ -1,6 +1,8 @@
 package dev.akarah.provider.entity.components;
 
+import dev.akarah.entities.types.GUIComponent;
 import dev.akarah.entities.types.IdentityComponent;
+import dev.akarah.entities.types.InventoryComponent;
 import dev.akarah.entities.types.PlayerComponent;
 import dev.akarah.item.Item;
 import dev.akarah.provider.item.ItemImpl;
@@ -23,79 +25,13 @@ public class PlayerView implements PlayerComponent {
         this.entity = entity;
     }
 
-
     @Override
-    public void sendMessage(String message) {
-        entity.connection.send(new ClientboundSystemChatPacket(
-            FormatParser.parse(message),
-            false
-        ));
+    public GUIComponent gui() {
+        return new GUIView(entity);
     }
 
     @Override
-    public void sendActionBar(String message) {
-        entity.connection.send(new ClientboundSystemChatPacket(
-            FormatParser.parse(message),
-            true
-        ));
-    }
-
-    @Override
-    public void sendTitle(String title) {
-        entity.connection.send(new ClientboundSetTitleTextPacket(
-            FormatParser.parse(title)
-        ));
-    }
-
-    @Override
-    public void sendSubtitle(String subtitle) {
-        entity.connection.send(new ClientboundSetSubtitleTextPacket(
-            FormatParser.parse(subtitle)
-        ));
-    }
-
-    @Override
-    public void sendTitleTimes(int duration, int fadeIn, int fadeOut) {
-        entity.connection.send(new ClientboundSetTitlesAnimationPacket(
-            fadeIn,
-            duration,
-            fadeOut
-        ));
-    }
-
-    @Override
-    public void giveItem(Item item) {
-        entity.getInventory().add(ItemImpl.fromItem(item));
-    }
-
-    @Override
-    public void giveItems(Item... items) {
-        for(var item : items)
-            entity.getInventory().add(ItemImpl.fromItem(item));
-    }
-
-    @Override
-    public void setItem(Item item, int slot) {
-        entity.getInventory().setItem(slot, ItemImpl.fromItem(item));
-    }
-
-    @Override
-    public boolean hasItems(Item item) {
-        return entity.getInventory().hasAnyOf(Set.of(ItemImpl.fromItem(item).getItem()));
-    }
-
-    @Override
-    public void removeItems(Item item) {
-        entity.getInventory().removeItem(ItemImpl.fromItem(item));
-    }
-
-    @Override
-    public void setSidebarName(String name) {
-
-    }
-
-    @Override
-    public void setSidebarLine(String text, int line) {
-
+    public InventoryComponent inventory() {
+        return new PlayerInvView(entity);
     }
 }
