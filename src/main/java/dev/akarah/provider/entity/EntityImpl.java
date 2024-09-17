@@ -1,11 +1,13 @@
 package dev.akarah.provider.entity;
 
+import dev.akarah.APIProvider;
 import dev.akarah.datatypes.server.Identifier;
+import dev.akarah.datatypes.server.Location;
 import dev.akarah.entities.Entity;
 import dev.akarah.entities.EntityComponent;
 import dev.akarah.entities.EntityType;
+import dev.akarah.entities.types.LocationComponent;
 import dev.akarah.provider.entity.components.IdentityView;
-import dev.akarah.provider.entity.components.LocationView;
 import dev.akarah.provider.entity.components.PlayerView;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -27,7 +29,9 @@ public class EntityImpl implements Entity {
     public <T> Optional<T> component(EntityComponent<T> component) {
         switch (component.internalName().toString()) {
              case "api:location" -> {
-                return (Optional<T>) Optional.of(new LocationView(this.entity));
+                return (Optional<T>) Optional.of(new LocationComponent(
+                    new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension())),
+                    new Location(entity.getX(), entity.getY(), entity.getZ(), 0f, 0f)));
              }
              case "api:identity" -> {
                  return (Optional<T>) Optional.of(new IdentityView(this.entity));

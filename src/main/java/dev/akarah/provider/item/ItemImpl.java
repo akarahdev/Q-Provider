@@ -14,10 +14,11 @@ public class ItemImpl {
     public static ItemStack fromItem(Item item) {
         var reg = BuiltInRegistries.ITEM.get(ResourceLocation.parse(item.getType().toString()));
         var inst = reg.getDefaultInstance().copy();
-        if(item.hasComponent(ItemComponent.ITEM_NAME)) {
+
+        if(item.component(ItemComponent.ITEM_NAME) != null)
             inst.set(DataComponents.ITEM_NAME,
                 FormatParser.parse(item.component(ItemComponent.ITEM_NAME)));
-        }
+
         return inst;
     }
 }
