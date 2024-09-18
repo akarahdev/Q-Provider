@@ -1,19 +1,22 @@
 package dev.akarah.provider.entity;
 
 import dev.akarah.APIProvider;
+import dev.akarah.component.AbstractComponent;
+import dev.akarah.component.MutableComponent;
 import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.datatypes.server.Location;
-import dev.akarah.entities.Entity;
-import dev.akarah.entities.EntityComponent;
-import dev.akarah.entities.EntityType;
-import dev.akarah.entities.types.LocationComponent;
-import dev.akarah.provider.entity.components.IdentityView;
-import dev.akarah.provider.entity.components.PlayerView;
-import net.minecraft.server.level.ServerPlayer;
+import dev.akarah.entities.*;
+import dev.akarah.provider.item.ItemImpl;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
-import java.util.Optional;
+import java.util.Set;
 
-public class EntityImpl implements Entity {
+public class EntityImpl extends Entity {
     public net.minecraft.world.entity.Entity entity;
 
     public EntityImpl(net.minecraft.world.entity.Entity entity) {
@@ -26,32 +29,76 @@ public class EntityImpl implements Entity {
     }
 
     @Override
-    public <T> Optional<T> component(EntityComponent<T> component) {
-        switch (component.internalName().toString()) {
-             case "api:location" -> {
-                return (Optional<T>) Optional.of(new LocationComponent(
-                    new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension())),
-                    new Location(entity.getX(), entity.getY(), entity.getZ(), 0f, 0f)));
-             }
-             case "api:identity" -> {
-                 return (Optional<T>) Optional.of(new IdentityView(this.entity));
-             }
-             case "api:player" -> {
-                 if(this.entity instanceof ServerPlayer player) {
-                     return (Optional<T>) Optional.of(new PlayerView(player));
-                 }
-             }
+    public <T> T component(AbstractComponent<T, Entity, EntityComponent> component) {
+        return switch (component) {
+            case HealthComponent healthComponent -> {
+                if(entity instanceof LivingEntity livingEntity) {
+                    yield (T) new HealthComponent(livingEntity.getHealth(), livingEntity.getMaxHealth());
+                }
+                yield null;
+            }
+            case LocationComponent locationComponent ->
+                (T) new LocationComponent(
+                        new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension())),
+                        new Location(
+                                entity.getX(),
+                                entity.getY(),
+                                entity.getZ(),
+                                0f,
+                                0f
+                        )
+                );
+            case EquipmentComponent equipmentComponent -> {
+                yield null;
+            }
+            default -> super.component(component);
+        };
+    }
+
+    @Override
+    public <T> Entity component(MutableComponent<T, Entity, EntityComponent> component, T value) {
+        var e = super.component(component, value);
+        switch (component) {
+            case HealthComponent x -> {
+                if(entity instanceof LivingEntity livingEntity) {
+                    livingEntity.setHealth((float) ((HealthComponent) value).health());
+                    if(livingEntity.getAttribute(Attributes.MAX_HEALTH) != null)
+                        livingEntity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(((HealthComponent) value).maxHealth());
+                }
+            }
+            case LocationComponent x -> {
+                entity.teleportTo(
+                        APIProvider.SERVER_INSTANCE.getLevel(ResourceKey.create(
+                                Registries.DIMENSION,
+                                ResourceLocation.parse(
+                                        ((LocationComponent) value).dimension().name().toString()
+                                ))),
+                        ((LocationComponent) value).location().x(),
+                        ((LocationComponent) value).location().y(),
+                        ((LocationComponent) value).location().z(),
+                        Set.of(),
+                        ((LocationComponent) value).location().pitch(),
+                        ((LocationComponent) value).location().yaw()
+                );
+            }
+            case EquipmentComponent x -> {
+                if(entity instanceof LivingEntity livingEntity) {
+                    livingEntity.setItemSlot(EquipmentSlot.HEAD,
+                            ItemImpl.fromItem(((EquipmentComponent) value).helmet()));
+                    livingEntity.setItemSlot(EquipmentSlot.CHEST,
+                            ItemImpl.fromItem(((EquipmentComponent) value).chestplate()));
+                    livingEntity.setItemSlot(EquipmentSlot.LEGS,
+                            ItemImpl.fromItem(((EquipmentComponent) value).leggings()));
+                    livingEntity.setItemSlot(EquipmentSlot.FEET,
+                            ItemImpl.fromItem(((EquipmentComponent) value).boots()));
+                    livingEntity.setItemSlot(EquipmentSlot.MAINHAND,
+                            ItemImpl.fromItem(((EquipmentComponent) value).mainHand()));
+                    livingEntity.setItemSlot(EquipmentSlot.OFFHAND,
+                            ItemImpl.fromItem(((EquipmentComponent) value).offHand()));
+                }
+            }
+            default -> {}
         }
-        return Optional.empty();
-    }
-
-    @Override
-    public <T> void component(EntityComponent<T> component, T value) {
-        throw new RuntimeException("TODO");
-    }
-
-    @Override
-    public <T> boolean hasComponent(EntityComponent<T> component) {
-        throw new RuntimeException("TODO");
+        return e;
     }
 }

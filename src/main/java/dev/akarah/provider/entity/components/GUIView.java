@@ -1,7 +1,7 @@
 package dev.akarah.provider.entity.components;
 
-import dev.akarah.entities.types.GUIComponent;
-import dev.akarah.entities.types.InventoryComponent;
+import dev.akarah.entities.GUIComponent;
+import dev.akarah.entities.InventoryComponent;
 import dev.akarah.provider.parse.FormatParser;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;

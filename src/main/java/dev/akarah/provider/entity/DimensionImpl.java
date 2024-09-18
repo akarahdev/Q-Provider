@@ -73,6 +73,8 @@ public class DimensionImpl implements Dimension {
             (int) location.y(),
             (int) location.z()
         ), MobSpawnType.COMMAND);
-        return new EntityImpl(outEnt);
+
+        var entity = new EntityImpl(outEnt);
+        return entity;
     }
 }

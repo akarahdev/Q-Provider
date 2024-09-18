@@ -1,6 +1,6 @@
 package dev.akarah.provider.entity.components;
 
-import dev.akarah.entities.types.InventoryComponent;
+import dev.akarah.entities.InventoryComponent;
 import dev.akarah.item.Item;
 import dev.akarah.provider.item.ItemImpl;
 import net.minecraft.server.level.ServerPlayer;

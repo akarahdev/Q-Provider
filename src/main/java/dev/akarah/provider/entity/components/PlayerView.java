@@ -1,9 +1,7 @@
 package dev.akarah.provider.entity.components;
 
-import dev.akarah.entities.types.GUIComponent;
-import dev.akarah.entities.types.IdentityComponent;
-import dev.akarah.entities.types.InventoryComponent;
-import dev.akarah.entities.types.PlayerComponent;
+import dev.akarah.datatypes.server.Identifier;
+import dev.akarah.entities.*;
 import dev.akarah.item.Item;
 import dev.akarah.provider.item.ItemImpl;
 import dev.akarah.provider.parse.FormatParser;
@@ -13,7 +11,6 @@ import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 
 import java.util.Set;
 import java.util.UUID;
@@ -33,5 +30,10 @@ public class PlayerView implements PlayerComponent {
     @Override
     public InventoryComponent inventory() {
         return new PlayerInvView(entity);
+    }
+
+    @Override
+    public boolean isPresent(Entity holder) {
+        return holder.entityType().resourceKey().equals(Identifier.of("minecraft:player"));
     }
 }

@@ -1,6 +1,6 @@
 package dev.akarah.provider.entity.components;
 
-import dev.akarah.entities.types.IdentityComponent;
+import dev.akarah.entities.IdentityComponent;
 import net.minecraft.world.entity.Entity;
 
 import java.util.UUID;
@@ -20,5 +20,10 @@ public class IdentityView implements IdentityComponent {
     @Override
     public UUID uuid() {
         return this.entity.getUUID();
+    }
+
+    @Override
+    public boolean isPresent(dev.akarah.entities.Entity holder) {
+        return true;
     }
 }

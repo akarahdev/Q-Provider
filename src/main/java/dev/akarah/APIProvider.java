@@ -2,6 +2,7 @@ package dev.akarah;
 
 import dev.akarah.loading.PluginLoader;
 import dev.akarah.provider.entity.EntityImpl;
+import dev.akarah.provider.entity.components.PlayerView;
 import dev.akarah.provider.registry.MasterRegistry;
 import dev.akarah.registry.Registries;
 import net.fabricmc.api.ModInitializer;
@@ -23,6 +24,7 @@ public class APIProvider implements ModInitializer {
 
         ServerPlayConnectionEvents.JOIN.register((packetListener, packetSender, minecraftServer) -> {
             var player = new EntityImpl(packetListener.player);
+            player.unsafe().player = new PlayerView(packetListener.player);
 
             for(var listener : MinecraftServer.listeners().playerEventListeners()) {
                 listener.event().onConnect(player);
