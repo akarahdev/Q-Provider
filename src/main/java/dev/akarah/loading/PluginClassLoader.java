@@ -27,7 +27,6 @@ public class PluginClassLoader extends URLClassLoader {
         }, Thread.currentThread().getContextClassLoader());
         this.temporaryUuid = temporaryUuid;
 
-        System.out.println("Creating new plugin class loader of " + temporaryUuid);
         Files.write(
             FabricLoader.getInstance().getGameDir().resolve("./tmp_plugins/" + temporaryUuid + ".jar"),
             jarFileStream.readAllBytes()
@@ -40,7 +39,6 @@ public class PluginClassLoader extends URLClassLoader {
             jf.entries().asIterator().forEachRemaining(entry -> {
                 if (entry.getName().endsWith(".class")) {
                     try {
-                        System.out.println("en: " + entry.getName());
                         this.loadClass(
                             entry.getName()
                                 .replace(".class", "")
@@ -62,7 +60,6 @@ public class PluginClassLoader extends URLClassLoader {
         var clazz = super.findClass(name);
         System.out.println("name: " + name);
         if (Arrays.toString(clazz.getInterfaces()).contains("[interface dev.akarah.ServerPlugin]")) {
-            System.out.println("it's a plugin!");
             try {
                 var plugin = (ServerPlugin) clazz.getConstructor().newInstance();
                 plugin.onInitialization();
@@ -73,10 +70,6 @@ public class PluginClassLoader extends URLClassLoader {
                      NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            System.out.println("it's not a plugin...");
-            System.out.println(clazz.getSuperclass().getName());
-            System.out.println(Arrays.toString(clazz.getInterfaces()));
         }
         return clazz;
     }
