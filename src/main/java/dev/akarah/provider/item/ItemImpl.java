@@ -45,7 +45,7 @@ public class ItemImpl {
             var cd = new CustomDataComponent();
             var nbt = itemStack.get(DataComponents.CUSTOM_DATA);
             for(var entry : nbt.copyTag().getAllKeys()) {
-                cd.put(entry, nbt.copyTag().get(entry));
+                cd.put(entry, from(nbt.copyTag().get(entry)));
             }
             item = item.component(
                     ItemComponent.CUSTOM_DATA,
