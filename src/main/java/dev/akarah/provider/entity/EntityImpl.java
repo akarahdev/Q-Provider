@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.Set;
 
+@SuppressWarnings("unchecked")
 public class EntityImpl extends Entity {
     public net.minecraft.world.entity.Entity entity;
 
@@ -49,6 +50,16 @@ public class EntityImpl extends Entity {
                         )
                 );
             case EquipmentComponent equipmentComponent -> {
+                if(entity instanceof LivingEntity livingEntity) {
+                    yield (T) new EquipmentComponent(
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.HEAD)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.CHEST)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.LEGS)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.FEET)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND))
+                    );
+                }
                 yield null;
             }
             default -> super.component(component);

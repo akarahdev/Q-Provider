@@ -6,4 +6,5 @@ public class FormatParser {
     public static Component parse(String format) {
         return Component.literal(format);
     }
+    public static String from(Component component) { return component.getString(); }
 }
