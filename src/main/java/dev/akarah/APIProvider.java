@@ -27,10 +27,14 @@ public class APIProvider implements ModInitializer {
     public void onInitialize() {
         System.out.println("Hello world!");
 
+        MinecraftServer.setBackingInstance(new ProviderServerInstance());
+
         PluginLoader.reloadAllPlugins();
         Registries.REGISTRIES = new MasterRegistry();
 
         ServerPlayConnectionEvents.JOIN.register((packetListener, packetSender, minecraftServer) -> {
+            APIProvider.SERVER_INSTANCE = minecraftServer;
+
             var player = new EntityImpl(packetListener.player);
             player.unsafe().player = new PlayerView(packetListener.player);
 

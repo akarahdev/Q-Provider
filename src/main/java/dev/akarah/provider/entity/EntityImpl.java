@@ -6,10 +6,12 @@ import dev.akarah.component.MutableComponent;
 import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.datatypes.server.Location;
 import dev.akarah.entities.*;
+import dev.akarah.provider.entity.components.PlayerView;
 import dev.akarah.provider.item.ItemImpl;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -32,6 +34,12 @@ public class EntityImpl extends Entity {
     @Override
     public <T> T component(AbstractComponent<T, Entity, EntityComponent> component) {
         return switch (component) {
+            case PlayerComponent playerComponent -> {
+                if(entity instanceof ServerPlayer player) {
+                    yield (T) new PlayerView(player);
+                }
+                yield null;
+            }
             case HealthComponent healthComponent -> {
                 if(entity instanceof LivingEntity livingEntity) {
                     yield (T) new HealthComponent(livingEntity.getHealth(), livingEntity.getMaxHealth());
