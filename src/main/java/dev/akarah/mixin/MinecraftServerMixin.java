@@ -2,6 +2,7 @@ package dev.akarah.mixin;
 
 import com.mojang.datafixers.DataFixer;
 import dev.akarah.APIProvider;
+import dev.akarah.codegen.Generate;
 import dev.akarah.provider.Scheduler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.Services;
@@ -34,6 +35,11 @@ public abstract class MinecraftServerMixin {
         CallbackInfo ci
     ) {
         APIProvider.SERVER_INSTANCE = ((MinecraftServer) (Object) this);
+        Generate.generateBuiltinItems();
+        Generate.generateBuiltinDimensions();
+        // Generate.generateBuiltinEntities();
+        Generate.generateBuiltinBlocks();
+
     }
 
     @Inject(
