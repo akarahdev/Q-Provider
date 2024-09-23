@@ -10,6 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.List;
 import java.util.Optional;
 
 public class BlockTypeRegistry implements Registry<BlockType> {
@@ -28,5 +29,11 @@ public class BlockTypeRegistry implements Registry<BlockType> {
     @Override
     public void put(Identifier<BlockType> resourceKey, BlockType value) throws RegistryFrozenException {
         throw new RegistryFrozenException();
+    }
+
+    @Override
+    public List<Identifier<BlockType>> keys() {
+        var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.BLOCK).get();
+        return reg.listElementIds().map(it -> Identifier.<BlockType>of(it.location().toString())).toList();
     }
 }

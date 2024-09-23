@@ -16,6 +16,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
+import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("unchecked")
@@ -32,43 +33,47 @@ public class EntityImpl extends Entity {
     }
 
     @Override
-    public <T> T component(AbstractComponent<T, Entity, EntityComponent> component) {
+    public <T> Optional<T> component(AbstractComponent<T, Entity, EntityComponent> component) {
         return switch (component) {
             case PlayerComponent playerComponent -> {
                 if(entity instanceof ServerPlayer player) {
-                    yield (T) new PlayerView(player);
+                    yield (Optional<T>) Optional.of(new PlayerView(player));
                 }
-                yield null;
+                yield Optional.empty();
             }
             case HealthComponent healthComponent -> {
                 if(entity instanceof LivingEntity livingEntity) {
-                    yield (T) new HealthComponent(livingEntity.getHealth(), livingEntity.getMaxHealth());
+                    yield (Optional<T>) Optional.of(new HealthComponent(livingEntity.getHealth(), livingEntity.getMaxHealth()));
                 }
-                yield null;
+                yield Optional.empty();
             }
             case LocationComponent locationComponent ->
-                (T) new LocationComponent(
-                        new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension())),
-                        new Location(
-                                entity.getX(),
-                                entity.getY(),
-                                entity.getZ(),
-                                0f,
-                                0f
+                (Optional<T>) Optional.of(
+                        new LocationComponent(
+                                new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension())),
+                                new Location(
+                                        entity.getX(),
+                                        entity.getY(),
+                                        entity.getZ(),
+                                        0f,
+                                        0f
+                                )
                         )
                 );
             case EquipmentComponent equipmentComponent -> {
                 if(entity instanceof LivingEntity livingEntity) {
-                    yield (T) new EquipmentComponent(
-                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.HEAD)),
-                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.CHEST)),
-                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.LEGS)),
-                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.FEET)),
-                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND)),
-                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND))
+                    yield (Optional<T>) Optional.of(
+                            new EquipmentComponent(
+                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.HEAD)),
+                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.CHEST)),
+                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.LEGS)),
+                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.FEET)),
+                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND)),
+                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND))
+                            )
                     );
                 }
-                yield null;
+                yield Optional.empty();
             }
             default -> super.component(component);
         };

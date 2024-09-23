@@ -22,14 +22,14 @@ public class ItemImpl {
         var reg = BuiltInRegistries.ITEM.get(ResourceLocation.parse(item.getType().toString()));
         var inst = reg.getDefaultInstance().copy();
 
-        if(item.component(ItemComponent.ITEM_NAME) != null)
+        item.component(ItemComponent.ITEM_NAME).ifPresent(itemName -> {
             inst.set(DataComponents.ITEM_NAME,
-                FormatParser.parse(item.component(ItemComponent.ITEM_NAME)));
-
-        if(item.component(ItemComponent.CUSTOM_DATA) != null) {
+                    FormatParser.parse(itemName));
+        });
+        item.component(ItemComponent.CUSTOM_DATA).ifPresent(cd -> {
             inst.set(DataComponents.CUSTOM_DATA,
-                    CustomData.of((CompoundTag) from(item.component(ItemComponent.CUSTOM_DATA).structure())));
-        }
+                    CustomData.of((CompoundTag) from(cd.structure())));
+        });
         return inst;
     }
 
