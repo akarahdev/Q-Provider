@@ -21,32 +21,32 @@ public class ItemImpl {
 
         item.get(ItemComponent.ITEM_NAME).ifPresent(itemName -> {
             inst.set(DataComponents.ITEM_NAME,
-                    new ComponentSerializer(itemName).parseTag());
+                new ComponentSerializer(itemName).parseTag());
         });
         item.get(ItemComponent.CUSTOM_DATA).ifPresent(cd -> {
             inst.set(DataComponents.CUSTOM_DATA,
-                    CustomData.of((CompoundTag) from(cd.structure())));
+                CustomData.of((CompoundTag) from(cd.structure())));
         });
         return inst;
     }
 
     public static Item fromItemStack(ItemStack itemStack) {
         var item = Item.of(itemStack.getItemHolder().getRegisteredName());
-        if(itemStack.has(DataComponents.ITEM_NAME)) {
+        if (itemStack.has(DataComponents.ITEM_NAME)) {
             item = item.set(
-                    ItemComponent.ITEM_NAME,
-                    "TODO"
+                ItemComponent.ITEM_NAME,
+                "TODO"
             );
         }
-        if(itemStack.has(DataComponents.CUSTOM_DATA)) {
+        if (itemStack.has(DataComponents.CUSTOM_DATA)) {
             var cd = new CustomDataComponent();
             var nbt = itemStack.get(DataComponents.CUSTOM_DATA);
-            for(var entry : nbt.copyTag().getAllKeys()) {
+            for (var entry : nbt.copyTag().getAllKeys()) {
                 cd.put(entry, from(nbt.copyTag().get(entry)));
             }
             item = item.set(
-                    ItemComponent.CUSTOM_DATA,
-                    cd
+                ItemComponent.CUSTOM_DATA,
+                cd
             );
         }
         return item;
@@ -63,7 +63,7 @@ public class ItemImpl {
             case StringTag stringTag -> new NbtElement.StringValue(stringTag.getAsString());
             case CompoundTag compoundTag -> {
                 var ne = new NbtElement.CompoundValue(new HashMap<>());
-                for(var key : compoundTag.getAllKeys()) {
+                for (var key : compoundTag.getAllKeys()) {
                     ne.value().put(key, from(compoundTag.get(key)));
                 }
                 yield ne;
@@ -71,7 +71,7 @@ public class ItemImpl {
             case ListTag listTag -> {
                 var ne = new NbtElement.ListValue(new NbtElement[listTag.size()]);
                 int index = 0;
-                for(var elem : listTag) {
+                for (var elem : listTag) {
                     ne.value()[index] = from(elem);
                     index++;
                 }
@@ -80,6 +80,7 @@ public class ItemImpl {
             default -> new NbtElement.Int(-1);
         };
     }
+
     public static Tag from(NbtElement value) {
         return switch (value) {
             case NbtElement.Byte v -> ByteTag.valueOf(v.value());
@@ -91,13 +92,13 @@ public class ItemImpl {
             case NbtElement.StringValue v -> StringTag.valueOf(v.value());
             case NbtElement.CompoundValue v -> {
                 var ct = new CompoundTag();
-                for(var entry : v.value().entrySet())
+                for (var entry : v.value().entrySet())
                     ct.put(entry.getKey(), from(entry.getValue()));
                 yield ct;
             }
             case NbtElement.ListValue v -> {
                 var lt = new ListTag();
-                for(var elem : v.value())
+                for (var elem : v.value())
                     lt.add(from(elem));
                 yield lt;
             }

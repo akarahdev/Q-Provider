@@ -1,7 +1,10 @@
 package dev.akarah.provider.entity.components;
 
 import dev.akarah.datatypes.server.Identifier;
-import dev.akarah.entities.*;
+import dev.akarah.entities.Entity;
+import dev.akarah.entities.GUIComponent;
+import dev.akarah.entities.InventoryComponent;
+import dev.akarah.entities.PlayerComponent;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PlayerView implements PlayerComponent {

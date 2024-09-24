@@ -36,41 +36,40 @@ public class EntityImpl extends Entity {
     public <T> Optional<T> get(AbstractComponent<T, Entity, EntityComponent> component) {
         return switch (component) {
             case PlayerComponent playerComponent -> {
-                if(entity instanceof ServerPlayer player) {
+                if (entity instanceof ServerPlayer player) {
                     yield (Optional<T>) Optional.of(new PlayerView(player));
                 }
                 yield Optional.empty();
             }
             case HealthComponent healthComponent -> {
-                if(entity instanceof LivingEntity livingEntity) {
+                if (entity instanceof LivingEntity livingEntity) {
                     yield (Optional<T>) Optional.of(new HealthComponent(livingEntity.getHealth(), livingEntity.getMaxHealth()));
                 }
                 yield Optional.empty();
             }
-            case LocationComponent locationComponent ->
-                (Optional<T>) Optional.of(
-                        new LocationComponent(
-                                new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension())),
-                                new Location(
-                                        entity.getX(),
-                                        entity.getY(),
-                                        entity.getZ(),
-                                        0f,
-                                        0f
-                                )
-                        )
-                );
+            case LocationComponent locationComponent -> (Optional<T>) Optional.of(
+                new LocationComponent(
+                    new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension())),
+                    new Location(
+                        entity.getX(),
+                        entity.getY(),
+                        entity.getZ(),
+                        0f,
+                        0f
+                    )
+                )
+            );
             case EquipmentComponent equipmentComponent -> {
-                if(entity instanceof LivingEntity livingEntity) {
+                if (entity instanceof LivingEntity livingEntity) {
                     yield (Optional<T>) Optional.of(
-                            new EquipmentComponent(
-                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.HEAD)),
-                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.CHEST)),
-                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.LEGS)),
-                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.FEET)),
-                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND)),
-                                    ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND))
-                            )
+                        new EquipmentComponent(
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.HEAD)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.CHEST)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.LEGS)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.FEET)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND)),
+                            ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND))
+                        )
                     );
                 }
                 yield Optional.empty();
@@ -84,44 +83,45 @@ public class EntityImpl extends Entity {
         var e = super.set(component, value);
         switch (component) {
             case HealthComponent x -> {
-                if(entity instanceof LivingEntity livingEntity) {
+                if (entity instanceof LivingEntity livingEntity) {
                     livingEntity.setHealth((float) ((HealthComponent) value).health());
-                    if(livingEntity.getAttribute(Attributes.MAX_HEALTH) != null)
+                    if (livingEntity.getAttribute(Attributes.MAX_HEALTH) != null)
                         livingEntity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(((HealthComponent) value).maxHealth());
                 }
             }
             case LocationComponent x -> {
                 entity.teleportTo(
-                        APIProvider.SERVER_INSTANCE.getLevel(ResourceKey.create(
-                                Registries.DIMENSION,
-                                ResourceLocation.parse(
-                                        ((LocationComponent) value).dimension().name().toString()
-                                ))),
-                        ((LocationComponent) value).location().x(),
-                        ((LocationComponent) value).location().y(),
-                        ((LocationComponent) value).location().z(),
-                        Set.of(),
-                        ((LocationComponent) value).location().pitch(),
-                        ((LocationComponent) value).location().yaw()
+                    APIProvider.SERVER_INSTANCE.getLevel(ResourceKey.create(
+                        Registries.DIMENSION,
+                        ResourceLocation.parse(
+                            ((LocationComponent) value).dimension().name().toString()
+                        ))),
+                    ((LocationComponent) value).location().x(),
+                    ((LocationComponent) value).location().y(),
+                    ((LocationComponent) value).location().z(),
+                    Set.of(),
+                    ((LocationComponent) value).location().pitch(),
+                    ((LocationComponent) value).location().yaw()
                 );
             }
             case EquipmentComponent x -> {
-                if(entity instanceof LivingEntity livingEntity) {
+                if (entity instanceof LivingEntity livingEntity) {
                     livingEntity.setItemSlot(EquipmentSlot.HEAD,
-                            ItemImpl.fromItem(((EquipmentComponent) value).helmet()));
+                        ItemImpl.fromItem(((EquipmentComponent) value).helmet()));
                     livingEntity.setItemSlot(EquipmentSlot.CHEST,
-                            ItemImpl.fromItem(((EquipmentComponent) value).chestplate()));
+                        ItemImpl.fromItem(((EquipmentComponent) value).chestplate()));
                     livingEntity.setItemSlot(EquipmentSlot.LEGS,
-                            ItemImpl.fromItem(((EquipmentComponent) value).leggings()));
+                        ItemImpl.fromItem(((EquipmentComponent) value).leggings()));
                     livingEntity.setItemSlot(EquipmentSlot.FEET,
-                            ItemImpl.fromItem(((EquipmentComponent) value).boots()));
+                        ItemImpl.fromItem(((EquipmentComponent) value).boots()));
                     livingEntity.setItemSlot(EquipmentSlot.MAINHAND,
-                            ItemImpl.fromItem(((EquipmentComponent) value).mainHand()));
+                        ItemImpl.fromItem(((EquipmentComponent) value).mainHand()));
                     livingEntity.setItemSlot(EquipmentSlot.OFFHAND,
-                            ItemImpl.fromItem(((EquipmentComponent) value).offHand()));
+                        ItemImpl.fromItem(((EquipmentComponent) value).offHand()));
                 }
             }
-            default -> {}
+            default -> {
+            }
         }
         return e;
     }

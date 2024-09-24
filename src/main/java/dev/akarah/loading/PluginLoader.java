@@ -3,7 +3,6 @@ package dev.akarah.loading;
 import dev.akarah.MinecraftServer;
 import dev.akarah.ServerPlugin;
 import dev.akarah.datatypes.event.EventPair;
-import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.event.DynamicRegistryListener;
 import dev.akarah.event.PlayerEventListener;
 import dev.akarah.event.StaticRegistryListener;
@@ -15,7 +14,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class PluginLoader {
     public static HashMap<String, ServerPlugin> LOADED_PLUGINS = new HashMap<>();
@@ -25,7 +23,7 @@ public class PluginLoader {
     public static void reloadAllPlugins() {
         System.out.println("Clearing all loaded plugins...");
 
-        for(var plugin : LOADED_PLUGINS.values()) {
+        for (var plugin : LOADED_PLUGINS.values()) {
             plugin.onFinalization();
         }
 
@@ -62,27 +60,27 @@ public class PluginLoader {
         plugin.onFinalization();
 
         var removedListeners = new ArrayList<>();
-        for(var listener : MinecraftServer.listeners().playerEventListeners()) {
-            if(listener.pluginId().equals(id))
+        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
+            if (listener.pluginId().equals(id))
                 removedListeners.add(listener);
         }
-        for(var listener : removedListeners)
+        for (var listener : removedListeners)
             MinecraftServer.listeners().playerEventListeners().remove((EventPair<PlayerEventListener>) listener);
 
         removedListeners = new ArrayList<>();
-        for(var listener : MinecraftServer.listeners().dynamicRegistryListeners()) {
-            if(listener.pluginId().equals(id))
+        for (var listener : MinecraftServer.listeners().dynamicRegistryListeners()) {
+            if (listener.pluginId().equals(id))
                 removedListeners.add(listener);
         }
-        for(var listener : removedListeners)
-            MinecraftServer.listeners().dynamicRegistryListeners().remove((EventPair<DynamicRegistryListener>)listener);
+        for (var listener : removedListeners)
+            MinecraftServer.listeners().dynamicRegistryListeners().remove((EventPair<DynamicRegistryListener>) listener);
 
         removedListeners = new ArrayList<>();
-        for(var listener : MinecraftServer.listeners().staticRegistryListeners()) {
-            if(listener.pluginId().equals(id))
+        for (var listener : MinecraftServer.listeners().staticRegistryListeners()) {
+            if (listener.pluginId().equals(id))
                 removedListeners.add(listener);
         }
-        for(var listener : removedListeners)
+        for (var listener : removedListeners)
             MinecraftServer.listeners().staticRegistryListeners().remove((EventPair<StaticRegistryListener>) listener);
 
         var cl = CLASS_LOADERS.get(id);

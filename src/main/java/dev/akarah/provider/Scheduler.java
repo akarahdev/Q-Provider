@@ -1,7 +1,5 @@
 package dev.akarah.provider;
 
-import org.spongepowered.asm.mixin.Unique;
-
 import java.util.ArrayList;
 import java.util.List;
 

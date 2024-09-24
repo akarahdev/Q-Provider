@@ -27,7 +27,7 @@ public class GUIView implements GUIComponent {
     @Override
     public void sendActionBar(String message) {
         entity.connection.send(new ClientboundSystemChatPacket(
-                new ComponentSerializer(message).parseTag(),
+            new ComponentSerializer(message).parseTag(),
             true
         ));
     }
@@ -35,14 +35,14 @@ public class GUIView implements GUIComponent {
     @Override
     public void sendTitle(String title) {
         entity.connection.send(new ClientboundSetTitleTextPacket(
-                new ComponentSerializer(title).parseTag()
+            new ComponentSerializer(title).parseTag()
         ));
     }
 
     @Override
     public void sendSubtitle(String subtitle) {
         entity.connection.send(new ClientboundSetSubtitleTextPacket(
-                new ComponentSerializer(subtitle).parseTag()
+            new ComponentSerializer(subtitle).parseTag()
         ));
     }
 

@@ -3,11 +3,9 @@ package dev.akarah.provider.registry;
 import dev.akarah.APIProvider;
 import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.dimension.Dimension;
-import dev.akarah.item.Item;
 import dev.akarah.provider.entity.DimensionImpl;
 import dev.akarah.registry.Registry;
 import dev.akarah.registry.RegistryFrozenException;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +37,7 @@ public class DimensionRegistry implements Registry<Dimension> {
     public List<Identifier<Dimension>> keys() {
         var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.DIMENSION).get();
         return reg.listElementIds()
-                .map(it -> Identifier.<Dimension>of(it.location().toString()))
-                .toList();
+            .map(it -> Identifier.<Dimension>of(it.location().toString()))
+            .toList();
     }
 }

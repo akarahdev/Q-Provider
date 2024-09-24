@@ -1,9 +1,6 @@
 package dev.akarah;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import dev.akarah.loading.PluginLoader;
 import dev.akarah.provider.Scheduler;
 import dev.akarah.provider.entity.EntityImpl;
@@ -13,14 +10,7 @@ import dev.akarah.registry.Registries;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.mixin.command.CommandManagerMixin;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.commands.Commands;
-import net.minecraft.server.PlayerAdvancements;
-import net.minecraft.server.TickTask;
-import net.minecraft.world.level.gameevent.DynamicGameEventListener;
-import net.minecraft.world.level.gameevent.GameEventListener;
-import net.minecraft.world.level.gameevent.GameEventListenerRegistry;
 
 import java.util.logging.Logger;
 
@@ -53,7 +43,6 @@ public class APIProvider implements ModInitializer {
         });
 
 
-
         CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                 Commands.literal("reload")
@@ -62,7 +51,7 @@ public class APIProvider implements ModInitializer {
                             Scheduler.ON_NEXT_TICK.add(() -> {
                                 try {
                                     PluginLoader.reloadPlugin(ctx.getArgument("plugin_id", String.class));
-                                } catch(Exception e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             });

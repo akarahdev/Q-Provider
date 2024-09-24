@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class PlayerInvView implements InventoryComponent {
@@ -19,7 +18,7 @@ public class PlayerInvView implements InventoryComponent {
 
     @Override
     public void addItem(Item... item) {
-        for(var sitem : item)
+        for (var sitem : item)
             entity.getInventory().add(ItemImpl.fromItem(sitem));
     }
 

@@ -11,13 +11,11 @@ import net.minecraft.server.level.progress.ChunkProgressListenerFactory;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.net.Proxy;
-import java.util.List;
 import java.util.function.BooleanSupplier;
 
 @Mixin(MinecraftServer.class)
@@ -47,7 +45,7 @@ public abstract class MinecraftServerMixin {
         at = @At("HEAD")
     )
     public void tick(BooleanSupplier hasTimeLeft, CallbackInfo ci) {
-        for(var task : Scheduler.ON_NEXT_TICK) {
+        for (var task : Scheduler.ON_NEXT_TICK) {
             task.run();
         }
         Scheduler.ON_NEXT_TICK.clear();

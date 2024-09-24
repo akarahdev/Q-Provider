@@ -43,7 +43,7 @@ public class ServerGamePacketListenerImplMixin {
 
     @Inject(method = "handlePlayerCommand", at = @At("HEAD"))
     public void handlePlayerCommand(ServerboundPlayerCommandPacket packet, CallbackInfo ci) {
-        switch(packet.getAction()) {
+        switch (packet.getAction()) {
             case PRESS_SHIFT_KEY -> {
                 for (var listener : MinecraftServer.listeners().playerEventListeners()) {
                     listener.event().onSneak(new EntityImpl(this.player));
@@ -82,10 +82,10 @@ public class ServerGamePacketListenerImplMixin {
         at = @At("HEAD")
     )
     public void handleContainerClick(ServerboundContainerClickPacket packet, CallbackInfo ci) {
-        if(packet.getContainerId() == this.player.containerMenu.containerId
-        && !this.player.isSpectator()
-        && !this.player.containerMenu.stillValid(this.player)
-        && this.player.containerMenu.isValidSlotIndex(packet.getSlotNum())) {
+        if (packet.getContainerId() == this.player.containerMenu.containerId
+            && !this.player.isSpectator()
+            && !this.player.containerMenu.stillValid(this.player)
+            && this.player.containerMenu.isValidSlotIndex(packet.getSlotNum())) {
             for (var listener : MinecraftServer.listeners().playerEventListeners()) {
                 listener.event().onClickInventory(new EntityImpl(this.player), packet.getSlotNum());
             }

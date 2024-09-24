@@ -1,11 +1,8 @@
 package dev.akarah.provider.registry;
 
-import dev.akarah.APIProvider;
 import dev.akarah.datatypes.server.Identifier;
-import dev.akarah.dimension.BlockType;
 import dev.akarah.registry.Registry;
 import dev.akarah.registry.RegistryFrozenException;
-import net.minecraft.core.registries.Registries;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +28,10 @@ public class MasterRegistry implements Registry<Registry<?>> {
     @Override
     public List<Identifier<Registry<?>>> keys() {
         return List.of(
-                Identifier.of("minecraft:item"),
-                Identifier.of("minecraft:dimension"),
-                Identifier.of("minecraft:block"),
-                Identifier.of("q_mc:master")
+            Identifier.of("minecraft:item"),
+            Identifier.of("minecraft:dimension"),
+            Identifier.of("minecraft:block"),
+            Identifier.of("q_mc:master")
         );
     }
 }

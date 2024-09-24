@@ -2,9 +2,7 @@ package dev.akarah.provider.registry;
 
 import dev.akarah.APIProvider;
 import dev.akarah.datatypes.server.Identifier;
-import dev.akarah.dimension.BlockType;
 import dev.akarah.entities.EntityType;
-import dev.akarah.provider.entity.BlockTypeImpl;
 import dev.akarah.provider.entity.EntityTypeImpl;
 import dev.akarah.registry.Registry;
 import dev.akarah.registry.RegistryFrozenException;
