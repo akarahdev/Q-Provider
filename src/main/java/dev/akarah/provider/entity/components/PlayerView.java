@@ -2,18 +2,7 @@ package dev.akarah.provider.entity.components;
 
 import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.entities.*;
-import dev.akarah.item.Item;
-import dev.akarah.provider.item.ItemImpl;
-import dev.akarah.provider.parse.FormatParser;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
-import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.Set;
-import java.util.UUID;
 
 public class PlayerView implements PlayerComponent {
     ServerPlayer entity;

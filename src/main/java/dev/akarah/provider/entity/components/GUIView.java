@@ -2,7 +2,7 @@ package dev.akarah.provider.entity.components;
 
 import dev.akarah.entities.GUIComponent;
 import dev.akarah.entities.InventoryComponent;
-import dev.akarah.provider.parse.FormatParser;
+import dev.akarah.provider.parse.ComponentSerializer;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -19,7 +19,7 @@ public class GUIView implements GUIComponent {
     @Override
     public void sendMessage(String message) {
         entity.connection.send(new ClientboundSystemChatPacket(
-            FormatParser.parse(message),
+            new ComponentSerializer(message).parseTag(),
             false
         ));
     }
@@ -27,7 +27,7 @@ public class GUIView implements GUIComponent {
     @Override
     public void sendActionBar(String message) {
         entity.connection.send(new ClientboundSystemChatPacket(
-            FormatParser.parse(message),
+                new ComponentSerializer(message).parseTag(),
             true
         ));
     }
@@ -35,14 +35,14 @@ public class GUIView implements GUIComponent {
     @Override
     public void sendTitle(String title) {
         entity.connection.send(new ClientboundSetTitleTextPacket(
-            FormatParser.parse(title)
+                new ComponentSerializer(title).parseTag()
         ));
     }
 
     @Override
     public void sendSubtitle(String subtitle) {
         entity.connection.send(new ClientboundSetSubtitleTextPacket(
-            FormatParser.parse(subtitle)
+                new ComponentSerializer(subtitle).parseTag()
         ));
     }
 

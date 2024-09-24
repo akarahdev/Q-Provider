@@ -1,20 +1,17 @@
 package dev.akarah.provider.item;
 
-import dev.akarah.APIProvider;
 import dev.akarah.datatypes.nbt.NbtElement;
 import dev.akarah.item.CustomDataComponent;
 import dev.akarah.item.Item;
 import dev.akarah.item.ItemComponent;
-import dev.akarah.provider.parse.FormatParser;
+import dev.akarah.provider.parse.ComponentSerializer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ItemImpl {
@@ -24,7 +21,7 @@ public class ItemImpl {
 
         item.component(ItemComponent.ITEM_NAME).ifPresent(itemName -> {
             inst.set(DataComponents.ITEM_NAME,
-                    FormatParser.parse(itemName));
+                    new ComponentSerializer(itemName).parseTag());
         });
         item.component(ItemComponent.CUSTOM_DATA).ifPresent(cd -> {
             inst.set(DataComponents.CUSTOM_DATA,
@@ -38,7 +35,7 @@ public class ItemImpl {
         if(itemStack.has(DataComponents.ITEM_NAME)) {
             item = item.component(
                     ItemComponent.ITEM_NAME,
-                    FormatParser.from(itemStack.get(DataComponents.ITEM_NAME))
+                    "TODO"
             );
         }
         if(itemStack.has(DataComponents.CUSTOM_DATA)) {
