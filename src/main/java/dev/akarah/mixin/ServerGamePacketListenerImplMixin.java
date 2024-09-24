@@ -20,7 +20,7 @@ public class ServerGamePacketListenerImplMixin {
     @Inject(method = "onDisconnect", at = @At("HEAD"))
     public void onDisconnect(DisconnectionDetails details, CallbackInfo ci) {
         for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            listener.event().onConnect(new EntityImpl(this.player));
+            listener.event().onDisconnect(new EntityImpl(this.player));
         }
     }
 
