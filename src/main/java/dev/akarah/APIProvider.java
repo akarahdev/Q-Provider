@@ -18,6 +18,9 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.TickTask;
+import net.minecraft.world.level.gameevent.DynamicGameEventListener;
+import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.level.gameevent.GameEventListenerRegistry;
 
 import java.util.logging.Logger;
 
@@ -48,6 +51,8 @@ public class APIProvider implements ModInitializer {
                 }
             }
         });
+
+
 
         CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> {
             dispatcher.register(

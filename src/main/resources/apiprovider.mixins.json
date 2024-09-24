@@ -4,6 +4,9 @@
   "package": "dev.akarah.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "CommandsMixin",
+    "EnchantmentsMixin",
+    "GameEventDispatcherMixin",
     "MinecraftServerMixin",
     "ReloadCommandMixin",
     "ServerGamePacketListenerImplMixin",
