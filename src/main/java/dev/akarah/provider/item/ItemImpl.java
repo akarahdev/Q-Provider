@@ -19,11 +19,11 @@ public class ItemImpl {
         var reg = BuiltInRegistries.ITEM.get(ResourceLocation.parse(item.getType().toString()));
         var inst = reg.getDefaultInstance().copy();
 
-        item.component(ItemComponent.ITEM_NAME).ifPresent(itemName -> {
+        item.get(ItemComponent.ITEM_NAME).ifPresent(itemName -> {
             inst.set(DataComponents.ITEM_NAME,
                     new ComponentSerializer(itemName).parseTag());
         });
-        item.component(ItemComponent.CUSTOM_DATA).ifPresent(cd -> {
+        item.get(ItemComponent.CUSTOM_DATA).ifPresent(cd -> {
             inst.set(DataComponents.CUSTOM_DATA,
                     CustomData.of((CompoundTag) from(cd.structure())));
         });
@@ -33,7 +33,7 @@ public class ItemImpl {
     public static Item fromItemStack(ItemStack itemStack) {
         var item = Item.of(itemStack.getItemHolder().getRegisteredName());
         if(itemStack.has(DataComponents.ITEM_NAME)) {
-            item = item.component(
+            item = item.set(
                     ItemComponent.ITEM_NAME,
                     "TODO"
             );
@@ -44,9 +44,9 @@ public class ItemImpl {
             for(var entry : nbt.copyTag().getAllKeys()) {
                 cd.put(entry, from(nbt.copyTag().get(entry)));
             }
-            item = item.component(
+            item = item.set(
                     ItemComponent.CUSTOM_DATA,
-                    new CustomDataComponent()
+                    cd
             );
         }
         return item;

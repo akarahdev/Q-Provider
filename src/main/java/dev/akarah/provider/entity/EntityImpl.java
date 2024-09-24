@@ -33,7 +33,7 @@ public class EntityImpl extends Entity {
     }
 
     @Override
-    public <T> Optional<T> component(AbstractComponent<T, Entity, EntityComponent> component) {
+    public <T> Optional<T> get(AbstractComponent<T, Entity, EntityComponent> component) {
         return switch (component) {
             case PlayerComponent playerComponent -> {
                 if(entity instanceof ServerPlayer player) {
@@ -75,13 +75,13 @@ public class EntityImpl extends Entity {
                 }
                 yield Optional.empty();
             }
-            default -> super.component(component);
+            default -> super.get(component);
         };
     }
 
     @Override
-    public <T> Entity component(MutableComponent<T, Entity, EntityComponent> component, T value) {
-        var e = super.component(component, value);
+    public <T> Entity set(MutableComponent<T, Entity, EntityComponent> component, T value) {
+        var e = super.set(component, value);
         switch (component) {
             case HealthComponent x -> {
                 if(entity instanceof LivingEntity livingEntity) {
