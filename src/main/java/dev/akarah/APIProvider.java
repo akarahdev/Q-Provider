@@ -14,7 +14,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.mixin.command.CommandManagerMixin;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.commands.Commands;
+import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.TickTask;
 
 import java.util.logging.Logger;
