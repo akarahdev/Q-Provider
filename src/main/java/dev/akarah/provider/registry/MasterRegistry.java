@@ -17,6 +17,7 @@ public class MasterRegistry implements Registry<Registry<?>> {
             case "minecraft:item" -> Optional.of(new ItemRegistry());
             case "minecraft:dimension" -> Optional.of(new DimensionRegistry());
             case "minecraft:block" -> Optional.of(new BlockTypeRegistry());
+            case "minecraft:entity" -> Optional.of(new EntityTypeRegistry());
             case "q_mc:master" -> Optional.of(new MasterRegistry());
             default -> Optional.empty();
         };

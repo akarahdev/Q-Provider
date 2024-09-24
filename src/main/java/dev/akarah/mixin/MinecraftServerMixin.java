@@ -37,7 +37,7 @@ public abstract class MinecraftServerMixin {
         APIProvider.SERVER_INSTANCE = ((MinecraftServer) (Object) this);
         Generate.generateBuiltinItems();
         Generate.generateBuiltinDimensions();
-        // Generate.generateBuiltinEntities();
+        Generate.generateBuiltinEntities();
         Generate.generateBuiltinBlocks();
 
     }
