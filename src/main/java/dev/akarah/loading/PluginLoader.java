@@ -3,6 +3,7 @@ package dev.akarah.loading;
 import dev.akarah.MinecraftServer;
 import dev.akarah.ServerPlugin;
 import dev.akarah.datatypes.event.EventPair;
+import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.event.DynamicRegistryListener;
 import dev.akarah.event.PlayerEventListener;
 import dev.akarah.event.StaticRegistryListener;
@@ -14,6 +15,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class PluginLoader {
     public static HashMap<String, ServerPlugin> LOADED_PLUGINS = new HashMap<>();

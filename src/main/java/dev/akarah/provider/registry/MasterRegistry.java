@@ -17,7 +17,7 @@ public class MasterRegistry implements Registry<Registry<?>> {
             case "minecraft:item" -> Optional.of(new ItemRegistry());
             case "minecraft:dimension" -> Optional.of(new DimensionRegistry());
             case "minecraft:block" -> Optional.of(new BlockTypeRegistry());
-            case "api:master" -> Optional.of(new MasterRegistry());
+            case "q_mc:master" -> Optional.of(new MasterRegistry());
             default -> Optional.empty();
         };
     }
@@ -33,7 +33,7 @@ public class MasterRegistry implements Registry<Registry<?>> {
                 Identifier.of("minecraft:item"),
                 Identifier.of("minecraft:dimension"),
                 Identifier.of("minecraft:block"),
-                Identifier.of("api:master")
+                Identifier.of("q_mc:master")
         );
     }
 }
