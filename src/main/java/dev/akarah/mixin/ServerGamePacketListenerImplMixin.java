@@ -1,7 +1,12 @@
 package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
+import dev.akarah.datatypes.server.Identifier;
+import dev.akarah.events.components.EventComponents;
+import dev.akarah.events.components.EventData;
+import dev.akarah.events.components.MainEntityComponent;
 import dev.akarah.provider.entity.EntityImpl;
+import dev.akarah.registry.Registries;
 import net.minecraft.network.DisconnectionDetails;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,16 +24,26 @@ public class ServerGamePacketListenerImplMixin {
 
     @Inject(method = "onDisconnect", at = @At("HEAD"))
     public void onDisconnect(DisconnectionDetails details, CallbackInfo ci) {
-        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            listener.event().onDisconnect(new EntityImpl(this.player));
-        }
+        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:disconnect"))
+                .ifPresent(it -> {
+                    for(var listener : it.eventListeners()) {
+                        var ed = EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player));
+                        listener.run(ed);
+                    }
+                });
     }
 
     @Inject(method = "handleAnimate", at = @At("HEAD"))
     public void handleAnimate(ServerboundSwingPacket packet, CallbackInfo ci) {
-        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            listener.event().onLeftClick(new EntityImpl(this.player), null);
-        }
+        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:left_click"))
+                .ifPresent(it -> {
+                    for(var listener : it.eventListeners()) {
+                        var ed = EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player));
+                        listener.run(ed);
+                    }
+                });
     }
 
     @Inject(method = "handleClientCommand", at = @At(
@@ -36,33 +51,58 @@ public class ServerGamePacketListenerImplMixin {
         target = "Lnet/minecraft/server/players/PlayerList;respawn(Lnet/minecraft/server/level/ServerPlayer;ZLnet/minecraft/world/entity/Entity$RemovalReason;)Lnet/minecraft/server/level/ServerPlayer;"
     ))
     public void handleClientCommand(ServerboundClientCommandPacket packet, CallbackInfo ci) {
-        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            listener.event().onRespawn(new EntityImpl(this.player));
-        }
+        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:respawn"))
+                .ifPresent(it -> {
+                    for(var listener : it.eventListeners()) {
+                        var ed = EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player));
+                        listener.run(ed);
+                    }
+                });
     }
 
     @Inject(method = "handlePlayerCommand", at = @At("HEAD"))
     public void handlePlayerCommand(ServerboundPlayerCommandPacket packet, CallbackInfo ci) {
         switch (packet.getAction()) {
             case PRESS_SHIFT_KEY -> {
-                for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-                    listener.event().onSneak(new EntityImpl(this.player));
-                }
+                Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:sneak"))
+                        .ifPresent(it -> {
+                            for(var listener : it.eventListeners()) {
+                                var ed = EventData.Builder.empty()
+                                        .mainEntity(new EntityImpl(this.player));
+                                listener.run(ed);
+                            }
+                        });
             }
             case RELEASE_SHIFT_KEY -> {
-                for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-                    listener.event().onStopSneak(new EntityImpl(this.player));
-                }
+                Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:unsneak"))
+                        .ifPresent(it -> {
+                            for(var listener : it.eventListeners()) {
+                                var ed = EventData.Builder.empty()
+                                        .mainEntity(new EntityImpl(this.player));
+                                listener.run(ed);
+                            }
+                        });
             }
             case START_SPRINTING -> {
-                for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-                    listener.event().onStartSprint(new EntityImpl(this.player));
-                }
+                Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:start_sprinting"))
+                        .ifPresent(it -> {
+                            for(var listener : it.eventListeners()) {
+                                var ed = EventData.Builder.empty()
+                                        .mainEntity(new EntityImpl(this.player));
+                                listener.run(ed);
+                            }
+                        });
             }
             case STOP_SPRINTING -> {
-                for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-                    listener.event().onStopSprint(new EntityImpl(this.player));
-                }
+                Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:stop_sprinting"))
+                        .ifPresent(it -> {
+                            for(var listener : it.eventListeners()) {
+                                var ed = EventData.Builder.empty()
+                                        .mainEntity(new EntityImpl(this.player));
+                                listener.run(ed);
+                            }
+                        });
             }
         }
     }
@@ -72,9 +112,7 @@ public class ServerGamePacketListenerImplMixin {
         at = @At("HEAD")
     )
     public void handleContainerClose(ServerboundContainerClosePacket packet, CallbackInfo ci) {
-        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            listener.event().onCloseInventory(new EntityImpl(this.player));
-        }
+
     }
 
     @Inject(
@@ -86,9 +124,7 @@ public class ServerGamePacketListenerImplMixin {
             && !this.player.isSpectator()
             && !this.player.containerMenu.stillValid(this.player)
             && this.player.containerMenu.isValidSlotIndex(packet.getSlotNum())) {
-            for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-                listener.event().onClickInventory(new EntityImpl(this.player), packet.getSlotNum());
-            }
+
         }
     }
 }

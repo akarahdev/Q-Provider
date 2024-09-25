@@ -2,10 +2,8 @@ package dev.akarah.loading;
 
 import dev.akarah.MinecraftServer;
 import dev.akarah.ServerPlugin;
-import dev.akarah.datatypes.event.EventPair;
-import dev.akarah.event.DynamicRegistryListener;
-import dev.akarah.event.PlayerEventListener;
-import dev.akarah.event.StaticRegistryListener;
+import dev.akarah.events.Event;
+import dev.akarah.events.EventRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
@@ -31,9 +29,7 @@ public class PluginLoader {
         CLASS_LOADERS.clear();
         PLUGIN_FILE_NAMES.clear();
 
-        MinecraftServer.listeners().playerEventListeners().clear();
-        MinecraftServer.listeners().dynamicRegistryListeners().clear();
-        MinecraftServer.listeners().staticRegistryListeners().clear();
+        EventRegistry.EVENTS.clear();
 
         try (var walk = Files.walk(FabricLoader.getInstance().getGameDir().resolve("./plugins/"))) {
             walk.forEach(pluginFile -> {
@@ -53,44 +49,5 @@ public class PluginLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void reloadPlugin(String id) {
-        var plugin = LOADED_PLUGINS.get(id);
-        plugin.onFinalization();
-
-        var removedListeners = new ArrayList<>();
-        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            if (listener.pluginId().equals(id))
-                removedListeners.add(listener);
-        }
-        for (var listener : removedListeners)
-            MinecraftServer.listeners().playerEventListeners().remove((EventPair<PlayerEventListener>) listener);
-
-        removedListeners = new ArrayList<>();
-        for (var listener : MinecraftServer.listeners().dynamicRegistryListeners()) {
-            if (listener.pluginId().equals(id))
-                removedListeners.add(listener);
-        }
-        for (var listener : removedListeners)
-            MinecraftServer.listeners().dynamicRegistryListeners().remove((EventPair<DynamicRegistryListener>) listener);
-
-        removedListeners = new ArrayList<>();
-        for (var listener : MinecraftServer.listeners().staticRegistryListeners()) {
-            if (listener.pluginId().equals(id))
-                removedListeners.add(listener);
-        }
-        for (var listener : removedListeners)
-            MinecraftServer.listeners().staticRegistryListeners().remove((EventPair<StaticRegistryListener>) listener);
-
-        var cl = CLASS_LOADERS.get(id);
-        var jarFile = cl.getURLs()[0];
-        try {
-            cl.close();
-            new PluginClassLoader(jarFile.openStream(), UUID.randomUUID());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 }

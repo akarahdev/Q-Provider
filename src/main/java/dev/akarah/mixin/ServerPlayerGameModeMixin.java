@@ -1,8 +1,11 @@
 package dev.akarah.mixin;
 
 import dev.akarah.MinecraftServer;
+import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.datatypes.server.Location;
+import dev.akarah.events.components.EventData;
 import dev.akarah.provider.entity.EntityImpl;
+import dev.akarah.registry.Registries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,18 +34,14 @@ public class ServerPlayerGameModeMixin {
     public void destroyAndAck(BlockPos pos, int sequence, String message, CallbackInfo ci) {
         // player.serverLevel().getBlockState(pos) to get the block before breaking
         // and attempt to stop the server from doing it if it's cancelled :3
-        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            try {
-                listener.event().onBreakBlock(new EntityImpl(this.player), new Location(
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ(),
-                    0, 0
-                ));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:break_block"))
+                .ifPresent(it -> {
+                    for(var listener : it.eventListeners()) {
+                        var ed = EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player));
+                        listener.run(ed);
+                    }
+                });
         // placeholding logic
         if (false) {
             this.player.connection.send(new ClientboundBlockUpdatePacket(pos, this.player.level().getBlockState(pos)));
@@ -52,18 +51,14 @@ public class ServerPlayerGameModeMixin {
 
     @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
     public void useItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
-        for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-            try {
-                listener.event().onPlaceBlock(new EntityImpl(this.player), new Location(
-                    hitResult.getBlockPos().getX(),
-                    hitResult.getBlockPos().getY(),
-                    hitResult.getBlockPos().getZ(),
-                    0, 0
-                ));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:place_block"))
+                .ifPresent(it -> {
+                    for(var listener : it.eventListeners()) {
+                        var ed = EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player));
+                        listener.run(ed);
+                    }
+                });
         // placeholding logic
         if (false) {
             this.player.connection.send(new ClientboundBlockUpdatePacket(hitResult.getBlockPos(), this.player.level().getBlockState(hitResult.getBlockPos())));

@@ -1,6 +1,9 @@
 package dev.akarah.provider.registry;
 
+import dev.akarah.APIProvider;
 import dev.akarah.datatypes.server.Identifier;
+import dev.akarah.events.EventRegistry;
+import dev.akarah.registry.Registries;
 import dev.akarah.registry.Registry;
 import dev.akarah.registry.RegistryFrozenException;
 
@@ -10,14 +13,17 @@ import java.util.Optional;
 public class MasterRegistry implements Registry<Registry<?>> {
     @Override
     public Optional<Registry<?>> lookup(Identifier<Registry<?>> key) {
-        return switch (key.toString()) {
-            case "minecraft:item" -> Optional.of(new ItemRegistry());
-            case "minecraft:dimension" -> Optional.of(new DimensionRegistry());
-            case "minecraft:block" -> Optional.of(new BlockTypeRegistry());
-            case "minecraft:entity" -> Optional.of(new EntityTypeRegistry());
-            case "q_mc:master" -> Optional.of(new MasterRegistry());
-            default -> Optional.empty();
-        };
+        if(key.equals(Registries.ITEM))
+            return Optional.of(new ItemRegistry());
+        if(key.equals(Registries.DIMENSION))
+            return Optional.of(new DimensionRegistry());
+        if(key.equals(Registries.BLOCK_TYPES))
+            return Optional.of(new BlockTypeRegistry());
+        if(key.equals(Registries.ENTITY_TYPES))
+            return Optional.of(new EntityTypeRegistry());
+        if(key.equals(Registries.EVENTS))
+            return Optional.of(APIProvider.EVENT_REGISTRY);
+        return Optional.empty();
     }
 
     @Override

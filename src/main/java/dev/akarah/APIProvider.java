@@ -1,6 +1,10 @@
 package dev.akarah;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
+import dev.akarah.datatypes.server.Identifier;
+import dev.akarah.events.BuiltInEvents;
+import dev.akarah.events.EventRegistry;
+import dev.akarah.events.components.EventData;
 import dev.akarah.loading.PluginLoader;
 import dev.akarah.provider.Scheduler;
 import dev.akarah.provider.entity.EntityImpl;
@@ -18,14 +22,16 @@ public class APIProvider implements ModInitializer {
     public static Logger LOGGER = Logger.getLogger("Provider");
     public static net.minecraft.server.MinecraftServer SERVER_INSTANCE;
 
+    public static EventRegistry EVENT_REGISTRY = new EventRegistry();
     @Override
     public void onInitialize() {
         System.out.println("Hello world!");
+        Registries.REGISTRIES = new MasterRegistry();
 
         MinecraftServer.setBackingInstance(new ProviderServerInstance());
 
         PluginLoader.reloadAllPlugins();
-        Registries.REGISTRIES = new MasterRegistry();
+
 
         ServerPlayConnectionEvents.JOIN.register((packetListener, packetSender, minecraftServer) -> {
             APIProvider.SERVER_INSTANCE = minecraftServer;
@@ -33,32 +39,14 @@ public class APIProvider implements ModInitializer {
             var player = new EntityImpl(packetListener.player);
             player.unsafe().player = new PlayerView(packetListener.player);
 
-            for (var listener : MinecraftServer.listeners().playerEventListeners()) {
-                try {
-                    listener.event().onConnect(player);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            Registries.findRegistry(Registries.EVENTS).get().lookup(BuiltInEvents.PLAYER_CONNECT_EVENT)
+                    .ifPresent(it -> {
+                        for(var listener : it.eventListeners()) {
+                            var ed = EventData.Builder.empty()
+                                    .mainEntity(new EntityImpl(packetListener.player));
+                            listener.run(ed);
+                        }
+                    });
         });
-
-
-        CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(
-                Commands.literal("reload")
-                    .then(Commands.argument("plugin_id", StringArgumentType.word())
-                        .executes(ctx -> {
-                            Scheduler.ON_NEXT_TICK.add(() -> {
-                                try {
-                                    PluginLoader.reloadPlugin(ctx.getArgument("plugin_id", String.class));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            });
-
-                            return 0;
-                        }))
-            );
-        }));
     }
 }
