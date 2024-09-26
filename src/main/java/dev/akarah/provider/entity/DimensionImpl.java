@@ -3,7 +3,7 @@ package dev.akarah.provider.entity;
 import dev.akarah.APIProvider;
 import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.datatypes.server.Location;
-import dev.akarah.dimension.Block;
+import dev.akarah.dimension.block.Block;
 import dev.akarah.dimension.Dimension;
 import dev.akarah.entities.Entity;
 import net.minecraft.core.BlockPos;
@@ -13,6 +13,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.stream.Stream;
 

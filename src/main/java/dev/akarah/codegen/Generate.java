@@ -80,8 +80,8 @@ public class Generate {
                 .sorted()
                 .collect(Collectors.joining("\n")));
             Files.writeString(
-                Path.of("../../api/src/main/java/dev/akarah/dimension/BuiltInBlocks.java"),
-                "package dev.akarah.dimension;\n" +
+                Path.of("../../api/src/main/java/dev/akarah/dimension/block/BuiltInBlocks.java"),
+                "package dev.akarah.dimension.block;\n" +
                     "import dev.akarah.datatypes.server.Identifier;\n" +
                     "import dev.akarah.item.Item;\n" +
                     "import dev.akarah.dimension.Dimension;\n" +

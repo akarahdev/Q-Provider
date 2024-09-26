@@ -1,7 +1,7 @@
 package dev.akarah.provider.entity;
 
 import dev.akarah.datatypes.server.Identifier;
-import dev.akarah.dimension.BlockType;
+import dev.akarah.dimension.block.BlockType;
 
 public class BlockTypeImpl implements BlockType {
     Identifier<?> internalName;
