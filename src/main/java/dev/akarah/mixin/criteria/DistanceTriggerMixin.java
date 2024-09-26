@@ -1,6 +1,7 @@
 package dev.akarah.mixin.criteria;
 
 import dev.akarah.APIProvider;
+import dev.akarah.datatypes.server.Location;
 import dev.akarah.events.BuiltInEvents;
 import dev.akarah.events.components.EventData;
 import dev.akarah.provider.entity.EntityImpl;
@@ -28,6 +29,12 @@ public class DistanceTriggerMixin {
                 BuiltInEvents.FALL_FROM_HEIGHT,
                 EventData.Builder.empty()
                     .mainEntity(new EntityImpl(player))
+                    .location(new Location(
+                        position.x,
+                        position.y,
+                        position.z,
+                        0, 0
+                    ))
             );
         }
     }

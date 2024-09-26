@@ -3,6 +3,7 @@ package dev.akarah.mixin.criteria;
 import dev.akarah.APIProvider;
 import dev.akarah.events.BuiltInEvents;
 import dev.akarah.events.components.EventData;
+import dev.akarah.provider.entity.EntityImpl;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.critereon.KilledTrigger;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,12 +25,17 @@ public class KilledTriggerMixin {
             APIProvider.dispatchEvent(
                 BuiltInEvents.PLAYER_KILLED_ENTITY,
                 EventData.Builder.empty()
+                    .attacker(new EntityImpl(player))
+                    .victim(new EntityImpl(entity))
             );
         }
         if((Object) this == CriteriaTriggers.ENTITY_KILLED_PLAYER) {
             APIProvider.dispatchEvent(
                 BuiltInEvents.ENTITY_KILLED_PLAYER,
                 EventData.Builder.empty()
+                    .attacker(new EntityImpl(entity))
+                    .victim(new EntityImpl(player))
+
             );
         }
     }

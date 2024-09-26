@@ -3,6 +3,7 @@ package dev.akarah.mixin.criteria;
 import dev.akarah.APIProvider;
 import dev.akarah.events.BuiltInEvents;
 import dev.akarah.events.components.EventData;
+import dev.akarah.provider.entity.DimensionImpl;
 import dev.akarah.provider.entity.EntityImpl;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.critereon.ChangeDimensionTrigger;
@@ -27,6 +28,8 @@ public class ChangedDimensionTriggerMixin {
                 BuiltInEvents.PLAYER_CHANGED_DIMENSION,
                 EventData.Builder.empty()
                     .mainEntity(new EntityImpl(player))
+                    .fromDimension(new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(fromLevel)))
+                    .toDimension(new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(toLevel)))
             );
         }
     }

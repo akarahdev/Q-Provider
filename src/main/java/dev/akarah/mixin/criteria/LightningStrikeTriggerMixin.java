@@ -28,6 +28,7 @@ public class LightningStrikeTriggerMixin {
                 BuiltInEvents.LIGHTNING_STRIKE,
                 EventData.Builder.empty()
                     .mainEntity(new EntityImpl(player))
+                    .victim(new EntityImpl(lightning))
             );
         }
     }

@@ -1,6 +1,7 @@
 package dev.akarah.mixin.criteria;
 
 import dev.akarah.APIProvider;
+import dev.akarah.datatypes.server.Location;
 import dev.akarah.events.BuiltInEvents;
 import dev.akarah.events.components.EventData;
 import dev.akarah.provider.entity.EntityImpl;
@@ -26,6 +27,13 @@ public class TargetBlockTriggerMixin {
                 BuiltInEvents.TARGET_BLOCK_HIT,
                 EventData.Builder.empty()
                     .mainEntity(new EntityImpl(player))
+                    .victim(new EntityImpl(projectile))
+                    .location(new Location(
+                        vector.x,
+                        vector.y,
+                        vector.z,
+                        0, 0
+                    ))
             );
         }
     }
