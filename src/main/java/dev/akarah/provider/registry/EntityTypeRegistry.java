@@ -12,28 +12,29 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class EntityTypeRegistry implements Registry<EntityType> {
     @Override
-    public Optional<EntityType> lookup(Identifier<EntityType> key) {
+    public EntityType get(Identifier<EntityType> key) {
         var cl = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse(key.toString()));
 
         var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.ENTITY_TYPE).get();
 
         if (reg.get(cl).isPresent()) {
-            return Optional.of(new EntityTypeImpl(Identifier.of(reg.get(cl).get().key().location().toString())));
+            return new EntityTypeImpl(Identifier.of(reg.get(cl).get().key().location().toString()));
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public void put(Identifier<EntityType> resourceKey, EntityType value) throws RegistryFrozenException {
+    public void register(Identifier<EntityType> resourceKey, EntityType value) throws RegistryFrozenException {
         throw new RegistryFrozenException();
     }
 
     @Override
-    public List<Identifier<EntityType>> keys() {
+    public Stream<Identifier<EntityType>> keys() {
         var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.ENTITY_TYPE).get();
-        return reg.listElementIds().map(it -> Identifier.<EntityType>of(it.location().toString())).toList();
+        return reg.listElementIds().map(it -> Identifier.<EntityType>of(it.location().toString()));
     }
 }

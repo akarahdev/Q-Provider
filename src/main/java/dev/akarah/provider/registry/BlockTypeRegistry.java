@@ -12,28 +12,29 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class BlockTypeRegistry implements Registry<BlockType> {
     @Override
-    public Optional<BlockType> lookup(Identifier<BlockType> key) {
+    public BlockType get(Identifier<BlockType> key) {
         var cl = ResourceKey.create(Registries.BLOCK, ResourceLocation.parse(key.toString()));
 
         var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.BLOCK).get();
 
         if (reg.get(cl).isPresent()) {
-            return Optional.of(new BlockTypeImpl(Identifier.of(reg.get(cl).get().key().location().toString())));
+            return new BlockTypeImpl(Identifier.of(reg.get(cl).get().key().location().toString()));
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public void put(Identifier<BlockType> resourceKey, BlockType value) throws RegistryFrozenException {
+    public void register(Identifier<BlockType> resourceKey, BlockType value) throws RegistryFrozenException {
         throw new RegistryFrozenException();
     }
 
     @Override
-    public List<Identifier<BlockType>> keys() {
+    public Stream<Identifier<BlockType>> keys() {
         var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.BLOCK).get();
-        return reg.listElementIds().map(it -> Identifier.<BlockType>of(it.location().toString())).toList();
+        return reg.listElementIds().map(it -> Identifier.of(it.location().toString()));
     }
 }

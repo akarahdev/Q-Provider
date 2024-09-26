@@ -3,6 +3,7 @@ package dev.akarah;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.events.BuiltInEvents;
+import dev.akarah.events.Event;
 import dev.akarah.events.EventRegistry;
 import dev.akarah.events.components.EventData;
 import dev.akarah.loading.PluginLoader;
@@ -39,14 +40,21 @@ public class APIProvider implements ModInitializer {
             var player = new EntityImpl(packetListener.player);
             player.unsafe().player = new PlayerView(packetListener.player);
 
-            Registries.findRegistry(Registries.EVENTS).get().lookup(BuiltInEvents.PLAYER_CONNECT_EVENT)
-                    .ifPresent(it -> {
-                        for(var listener : it.eventListeners()) {
-                            var ed = EventData.Builder.empty()
-                                    .mainEntity(new EntityImpl(packetListener.player));
-                            listener.run(ed);
-                        }
-                    });
+            APIProvider.dispatchEvent(
+                    BuiltInEvents.PLAYER_CONNECT_EVENT,
+                    EventData.Builder.empty()
+                            .mainEntity(new EntityImpl(packetListener.player))
+            );
         });
+    }
+
+    public static void dispatchEvent(Identifier<Event> event, EventData eventData) {
+        Registries.findRegistry(Registries.EVENTS).getOptional(event)
+                .ifPresent(it -> {
+                    for(var listener : it.eventListeners()) {
+                        var ed = eventData;
+                        listener.run(ed);
+                    }
+                });
     }
 }

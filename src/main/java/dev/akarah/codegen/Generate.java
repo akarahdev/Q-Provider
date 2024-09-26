@@ -10,8 +10,7 @@ import java.util.stream.Collectors;
 public class Generate {
     public static void generateBuiltinItems() {
         try {
-            var contents = (Registries.findRegistry(Registries.ITEM).get().keys()
-                .stream()
+            var contents = (Registries.findRegistry(Registries.ITEM).keys()
                 .map(it ->
                     "    public static Identifier<Item> {uname} = Identifier.<Item>of(\"{name}\");"
                         .replace("{uname}",
@@ -41,8 +40,7 @@ public class Generate {
 
     public static void generateBuiltinDimensions() {
         try {
-            var contents = (Registries.findRegistry(Registries.DIMENSION).get().keys()
-                .stream()
+            var contents = (Registries.findRegistry(Registries.DIMENSION).keys()
                 .map(it ->
                     "    public static Identifier<Dimension> {uname} = Identifier.<Dimension>of(\"{name}\");"
                         .replace("{uname}",
@@ -72,8 +70,7 @@ public class Generate {
 
     public static void generateBuiltinBlocks() {
         try {
-            var contents = (Registries.findRegistry(Registries.BLOCK_TYPES).get().keys()
-                .stream()
+            var contents = (Registries.findRegistry(Registries.BLOCK_TYPES).keys()
                 .map(it ->
                     "    public static Identifier<BlockType> {uname} = Identifier.<BlockType>of(\"{name}\");"
                         .replace("{uname}",
@@ -103,8 +100,7 @@ public class Generate {
 
     public static void generateBuiltinEntities() {
         try {
-            var contents = (Registries.findRegistry(Registries.ENTITY_TYPES).get().keys()
-                .stream()
+            var contents = (Registries.findRegistry(Registries.ENTITY_TYPES).keys()
                 .map(it ->
                     "    public static Identifier<EntityType> {uname} = Identifier.<EntityType>of(\"{name}\");"
                         .replace("{uname}",

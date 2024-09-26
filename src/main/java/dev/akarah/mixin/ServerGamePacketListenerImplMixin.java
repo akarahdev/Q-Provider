@@ -1,7 +1,9 @@
 package dev.akarah.mixin;
 
+import dev.akarah.APIProvider;
 import dev.akarah.MinecraftServer;
 import dev.akarah.datatypes.server.Identifier;
+import dev.akarah.events.BuiltInEvents;
 import dev.akarah.events.components.EventComponents;
 import dev.akarah.events.components.EventData;
 import dev.akarah.events.components.MainEntityComponent;
@@ -24,26 +26,16 @@ public class ServerGamePacketListenerImplMixin {
 
     @Inject(method = "onDisconnect", at = @At("HEAD"))
     public void onDisconnect(DisconnectionDetails details, CallbackInfo ci) {
-        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:disconnect"))
-                .ifPresent(it -> {
-                    for(var listener : it.eventListeners()) {
-                        var ed = EventData.Builder.empty()
-                                .mainEntity(new EntityImpl(this.player));
-                        listener.run(ed);
-                    }
-                });
+
     }
 
     @Inject(method = "handleAnimate", at = @At("HEAD"))
     public void handleAnimate(ServerboundSwingPacket packet, CallbackInfo ci) {
-        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:left_click"))
-                .ifPresent(it -> {
-                    for(var listener : it.eventListeners()) {
-                        var ed = EventData.Builder.empty()
-                                .mainEntity(new EntityImpl(this.player));
-                        listener.run(ed);
-                    }
-                });
+        APIProvider.dispatchEvent(
+                BuiltInEvents.LEFT_CLICK,
+                EventData.Builder.empty()
+                        .mainEntity(new EntityImpl(this.player))
+        );
     }
 
     @Inject(method = "handleClientCommand", at = @At(
@@ -51,58 +43,43 @@ public class ServerGamePacketListenerImplMixin {
         target = "Lnet/minecraft/server/players/PlayerList;respawn(Lnet/minecraft/server/level/ServerPlayer;ZLnet/minecraft/world/entity/Entity$RemovalReason;)Lnet/minecraft/server/level/ServerPlayer;"
     ))
     public void handleClientCommand(ServerboundClientCommandPacket packet, CallbackInfo ci) {
-        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:respawn"))
-                .ifPresent(it -> {
-                    for(var listener : it.eventListeners()) {
-                        var ed = EventData.Builder.empty()
-                                .mainEntity(new EntityImpl(this.player));
-                        listener.run(ed);
-                    }
-                });
+        APIProvider.dispatchEvent(
+                BuiltInEvents.PLAYER_RESPAWN,
+                EventData.Builder.empty()
+                        .mainEntity(new EntityImpl(this.player))
+        );
     }
 
     @Inject(method = "handlePlayerCommand", at = @At("HEAD"))
     public void handlePlayerCommand(ServerboundPlayerCommandPacket packet, CallbackInfo ci) {
         switch (packet.getAction()) {
             case PRESS_SHIFT_KEY -> {
-                Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:sneak"))
-                        .ifPresent(it -> {
-                            for(var listener : it.eventListeners()) {
-                                var ed = EventData.Builder.empty()
-                                        .mainEntity(new EntityImpl(this.player));
-                                listener.run(ed);
-                            }
-                        });
+                APIProvider.dispatchEvent(
+                        BuiltInEvents.START_SNEAKING,
+                        EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player))
+                );
             }
             case RELEASE_SHIFT_KEY -> {
-                Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:unsneak"))
-                        .ifPresent(it -> {
-                            for(var listener : it.eventListeners()) {
-                                var ed = EventData.Builder.empty()
-                                        .mainEntity(new EntityImpl(this.player));
-                                listener.run(ed);
-                            }
-                        });
+                APIProvider.dispatchEvent(
+                        BuiltInEvents.STOP_SNEAKING,
+                        EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player))
+                );
             }
             case START_SPRINTING -> {
-                Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:start_sprinting"))
-                        .ifPresent(it -> {
-                            for(var listener : it.eventListeners()) {
-                                var ed = EventData.Builder.empty()
-                                        .mainEntity(new EntityImpl(this.player));
-                                listener.run(ed);
-                            }
-                        });
+                APIProvider.dispatchEvent(
+                        BuiltInEvents.START_SPRINTING,
+                        EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player))
+                );
             }
             case STOP_SPRINTING -> {
-                Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:stop_sprinting"))
-                        .ifPresent(it -> {
-                            for(var listener : it.eventListeners()) {
-                                var ed = EventData.Builder.empty()
-                                        .mainEntity(new EntityImpl(this.player));
-                                listener.run(ed);
-                            }
-                        });
+                APIProvider.dispatchEvent(
+                        BuiltInEvents.STOP_SPRINTING,
+                        EventData.Builder.empty()
+                                .mainEntity(new EntityImpl(this.player))
+                );
             }
         }
     }

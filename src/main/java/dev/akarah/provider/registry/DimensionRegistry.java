@@ -12,10 +12,11 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class DimensionRegistry implements Registry<Dimension> {
     @Override
-    public Optional<Dimension> lookup(Identifier<Dimension> key) {
+    public Dimension get(Identifier<Dimension> key) {
         System.out.println("ts: " + key.toString());
         var cl = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(key.toString()));
 
@@ -23,21 +24,20 @@ public class DimensionRegistry implements Registry<Dimension> {
         var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.DIMENSION).get();
 
         if (reg.get(cl).isPresent()) {
-            return Optional.of(new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(cl)));
+            return new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(cl));
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public void put(Identifier<Dimension> resourceKey, Dimension value) throws RegistryFrozenException {
+    public void register(Identifier<Dimension> resourceKey, Dimension value) throws RegistryFrozenException {
         throw new RegistryFrozenException();
     }
 
     @Override
-    public List<Identifier<Dimension>> keys() {
+    public Stream<Identifier<Dimension>> keys() {
         var reg = APIProvider.SERVER_INSTANCE.registryAccess().lookup(Registries.DIMENSION).get();
         return reg.listElementIds()
-            .map(it -> Identifier.<Dimension>of(it.location().toString()))
-            .toList();
+            .map(it -> Identifier.<Dimension>of(it.location().toString()));
     }
 }

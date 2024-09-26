@@ -19,11 +19,11 @@ public class ItemImpl {
         var reg = BuiltInRegistries.ITEM.get(ResourceLocation.parse(item.getType().toString()));
         var inst = reg.getDefaultInstance().copy();
 
-        item.get(ItemComponent.ITEM_NAME).ifPresent(itemName -> {
+        item.getOptional(ItemComponent.ITEM_NAME).ifPresent(itemName -> {
             inst.set(DataComponents.ITEM_NAME,
                 new ComponentSerializer(itemName).parseTag());
         });
-        item.get(ItemComponent.CUSTOM_DATA).ifPresent(cd -> {
+        item.getOptional(ItemComponent.CUSTOM_DATA).ifPresent(cd -> {
             inst.set(DataComponents.CUSTOM_DATA,
                 CustomData.of((CompoundTag) from(cd.structure())));
         });

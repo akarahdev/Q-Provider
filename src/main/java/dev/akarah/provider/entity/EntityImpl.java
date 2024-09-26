@@ -33,21 +33,21 @@ public class EntityImpl extends Entity {
     }
 
     @Override
-    public <T> Optional<T> get(AbstractComponent<T, Entity, EntityComponent> component) {
+    public <T> T get(AbstractComponent<T, Entity, EntityComponent> component) {
         return switch (component) {
             case PlayerComponent playerComponent -> {
                 if (entity instanceof ServerPlayer player) {
-                    yield (Optional<T>) Optional.of(new PlayerView(player));
+                    yield (T) new PlayerView(player);
                 }
-                yield Optional.empty();
+                yield null;
             }
             case HealthComponent healthComponent -> {
                 if (entity instanceof LivingEntity livingEntity) {
-                    yield (Optional<T>) Optional.of(new HealthComponent(livingEntity.getHealth(), livingEntity.getMaxHealth()));
+                    yield (T) new HealthComponent(livingEntity.getHealth(), livingEntity.getMaxHealth());
                 }
-                yield Optional.empty();
+                yield null;
             }
-            case LocationComponent locationComponent -> (Optional<T>) Optional.of(
+            case LocationComponent locationComponent -> (T)
                 new LocationComponent(
                     new DimensionImpl(APIProvider.SERVER_INSTANCE.getLevel(entity.level().dimension())),
                     new Location(
@@ -57,11 +57,10 @@ public class EntityImpl extends Entity {
                         0f,
                         0f
                     )
-                )
             );
             case EquipmentComponent equipmentComponent -> {
                 if (entity instanceof LivingEntity livingEntity) {
-                    yield (Optional<T>) Optional.of(
+                    yield (T)
                         new EquipmentComponent(
                             ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.HEAD)),
                             ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.CHEST)),
@@ -69,10 +68,9 @@ public class EntityImpl extends Entity {
                             ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.FEET)),
                             ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND)),
                             ItemImpl.fromItemStack(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND))
-                        )
-                    );
+                        );
                 }
-                yield Optional.empty();
+                yield null;
             }
             default -> super.get(component);
         };

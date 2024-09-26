@@ -9,30 +9,30 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class ItemRegistry implements Registry<Item> {
     ItemRegistry() {
     }
 
     @Override
-    public Optional<Item> lookup(Identifier<Item> key) {
+    public Item get(Identifier<Item> key) {
         var rl = ResourceLocation.parse(key.toString());
         if (BuiltInRegistries.ITEM.containsKey(rl)) {
-            return Optional.of(Item.of(key, 1));
+            return Item.of(key, 1);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public void put(Identifier<Item> resourceKey, Item value) throws RegistryFrozenException {
+    public void register(Identifier<Item> resourceKey, Item value) throws RegistryFrozenException {
         throw new RegistryFrozenException();
     }
 
     @Override
-    public List<Identifier<Item>> keys() {
+    public Stream<Identifier<Item>> keys() {
         return BuiltInRegistries.ITEM.registryKeySet()
             .stream()
-            .map(it -> Identifier.<Item>of(it.location().toString()))
-            .toList();
+            .map(it -> Identifier.<Item>of(it.location().toString()));
     }
 }

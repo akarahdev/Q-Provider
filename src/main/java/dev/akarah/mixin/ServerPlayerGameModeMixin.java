@@ -1,8 +1,10 @@
 package dev.akarah.mixin;
 
+import dev.akarah.APIProvider;
 import dev.akarah.MinecraftServer;
 import dev.akarah.datatypes.server.Identifier;
 import dev.akarah.datatypes.server.Location;
+import dev.akarah.events.BuiltInEvents;
 import dev.akarah.events.components.EventData;
 import dev.akarah.provider.entity.EntityImpl;
 import dev.akarah.registry.Registries;
@@ -34,14 +36,7 @@ public class ServerPlayerGameModeMixin {
     public void destroyAndAck(BlockPos pos, int sequence, String message, CallbackInfo ci) {
         // player.serverLevel().getBlockState(pos) to get the block before breaking
         // and attempt to stop the server from doing it if it's cancelled :3
-        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:break_block"))
-                .ifPresent(it -> {
-                    for(var listener : it.eventListeners()) {
-                        var ed = EventData.Builder.empty()
-                                .mainEntity(new EntityImpl(this.player));
-                        listener.run(ed);
-                    }
-                });
+
         // placeholding logic
         if (false) {
             this.player.connection.send(new ClientboundBlockUpdatePacket(pos, this.player.level().getBlockState(pos)));
@@ -51,14 +46,7 @@ public class ServerPlayerGameModeMixin {
 
     @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
     public void useItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
-        Registries.findRegistry(Registries.EVENTS).get().lookup(Identifier.of("minecraft:place_block"))
-                .ifPresent(it -> {
-                    for(var listener : it.eventListeners()) {
-                        var ed = EventData.Builder.empty()
-                                .mainEntity(new EntityImpl(this.player));
-                        listener.run(ed);
-                    }
-                });
+
         // placeholding logic
         if (false) {
             this.player.connection.send(new ClientboundBlockUpdatePacket(hitResult.getBlockPos(), this.player.level().getBlockState(hitResult.getBlockPos())));
