@@ -11,6 +11,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.Unbreakable;
 
 import java.util.HashMap;
 
@@ -26,6 +27,12 @@ public class ItemImpl {
         item.getOptional(ItemComponent.CUSTOM_DATA).ifPresent(cd -> {
             inst.set(DataComponents.CUSTOM_DATA,
                 CustomData.of((CompoundTag) from(cd.structure())));
+        });
+        item.getOptional(ItemComponent.DAMAGE).ifPresent(damageComponent -> {
+            inst.set(DataComponents.DAMAGE, damageComponent.damage());
+            inst.set(DataComponents.DAMAGE, damageComponent.maxDamage());
+            if(damageComponent.unbreakable())
+                inst.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
         });
         return inst;
     }

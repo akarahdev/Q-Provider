@@ -2,6 +2,7 @@ package dev.akarah.mixin.criteria;
 
 import dev.akarah.APIProvider;
 import dev.akarah.datatypes.server.Identifier;
+import dev.akarah.events.BuiltInEvents;
 import dev.akarah.events.components.EventData;
 import dev.akarah.provider.entity.EntityImpl;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -31,6 +32,20 @@ public class PlayerTriggerMixin {
                     Identifier.of("minecraft:tick"),
                     EventData.Builder.empty()
                             .mainEntity(new EntityImpl(player))
+            );
+        }
+        if((Object) this == CriteriaTriggers.RAID_OMEN) {
+            APIProvider.dispatchEvent(
+                BuiltInEvents.RAID_OMEN,
+                EventData.Builder.empty()
+                    .mainEntity(new EntityImpl(player))
+            );
+        }
+        if((Object) this == CriteriaTriggers.RAID_WIN) {
+            APIProvider.dispatchEvent(
+                BuiltInEvents.RAID_WIN,
+                EventData.Builder.empty()
+                    .mainEntity(new EntityImpl(player))
             );
         }
     }

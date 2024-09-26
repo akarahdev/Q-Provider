@@ -11,7 +11,15 @@
     "ReloadCommandMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerPlayerGameModeMixin",
-    "criteria.PlayerTriggerMixin"
+    "criteria.ChangedDimensionTriggerMixin",
+    "criteria.DistanceTriggerMixin",
+    "criteria.EnterBlockTriggerMixin",
+    "criteria.InventoryChangedMixin",
+    "criteria.KilledTriggerMixin",
+    "criteria.LightningStrikeTriggerMixin",
+    "criteria.PlayerTriggerMixin",
+    "criteria.RecipeCraftedTriggerMixin",
+    "criteria.TargetBlockTriggerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
