@@ -24,6 +24,7 @@ public class APIProvider implements ModInitializer {
     public static net.minecraft.server.MinecraftServer SERVER_INSTANCE;
 
     public static EventRegistry EVENT_REGISTRY = new EventRegistry();
+
     @Override
     public void onInitialize() {
         System.out.println("Hello world!");
@@ -52,8 +53,7 @@ public class APIProvider implements ModInitializer {
         Registries.findRegistry(Registries.EVENTS).getOptional(event)
                 .ifPresent(it -> {
                     for(var listener : it.eventListeners()) {
-                        var ed = eventData;
-                        listener.run(ed);
+                        listener.run(eventData);
                     }
                 });
     }

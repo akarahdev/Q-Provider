@@ -40,7 +40,7 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "com.github.akarahdev:Q-API:c1c655b7ce"
+    modImplementation "com.github.akarahdev:Q-API:62542b65ce"
 }
 
 processResources {

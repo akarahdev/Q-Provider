@@ -34,7 +34,6 @@ public abstract class MinecraftServerMixin {
     ) {
         APIProvider.SERVER_INSTANCE = ((MinecraftServer) (Object) this);
         Generate.generateBuiltinItems();
-        Generate.generateBuiltinDimensions();
         Generate.generateBuiltinEntities();
         Generate.generateBuiltinBlocks();
 
@@ -42,7 +41,7 @@ public abstract class MinecraftServerMixin {
 
     @Inject(
         method = "tickChildren",
-        at = @At("HEAD")
+        at = @At("TAIL")
     )
     public void tick(BooleanSupplier hasTimeLeft, CallbackInfo ci) {
         for (var task : Scheduler.ON_NEXT_TICK) {

@@ -79,6 +79,7 @@ public class EntityImpl extends Entity {
     @Override
     public <T> Entity set(MutableComponent<T, Entity, EntityComponent> component, T value) {
         var e = super.set(component, value);
+
         switch (component) {
             case HealthComponent x -> {
                 if (entity instanceof LivingEntity livingEntity) {
