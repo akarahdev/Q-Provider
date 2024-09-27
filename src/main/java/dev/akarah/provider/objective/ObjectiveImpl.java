@@ -13,6 +13,11 @@ public class ObjectiveImpl extends Objective {
     Identifier<Objective> name;
     net.minecraft.world.scores.Objective objective;
 
+    public ObjectiveImpl(Identifier<Objective> name, net.minecraft.world.scores.Objective objective) {
+        this.name = name;
+        this.objective = objective;
+    }
+
     @Override
     public Identifier<Objective> name() {
         return name;
